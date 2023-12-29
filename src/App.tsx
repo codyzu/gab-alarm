@@ -87,7 +87,7 @@ function App() {
       {/* <div className='i-pixelarticons-moon-star h-60vh w-60vh' /> */}
       <div className="h-20vh w-full relative">
         <div className="leading-none text-14vh pb-1vh self-center font-mono">
-          {time.getHours()}:{time.getMinutes()}
+          {time.getHours()}:{time.getMinutes().toString().padStart(2, '0')}
         </div>
         <div
           className={clsx(
