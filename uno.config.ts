@@ -2,7 +2,7 @@
 import {defineConfig} from 'unocss';
 import presetUno from '@unocss/preset-uno';
 import presetIcons from '@unocss/preset-icons';
-// import presetTypography from '@unocss/preset-typography';
+import presetTypography from '@unocss/preset-typography';
 import transformerVariantGroup from '@unocss/transformer-variant-group';
 import transformerDirectives from '@unocss/transformer-directives';
 import presetWebFonts from '@unocss/preset-web-fonts';
@@ -16,7 +16,8 @@ export default defineConfig({
         'vertical-align': 'middle',
       },
     }),
-    // presetTypography({
+    presetTypography(),
+    // PresetTypography({
     //   // By default h2 and others have huge top margin, make them more reasonable
     //   cssExtend: {
     //     h1: {
@@ -40,7 +41,7 @@ export default defineConfig({
       // Prefer bunny provider, but it seems to be broken with 2 theme overrides (only loads the first)
       provider: 'google',
       fonts: {
-        // mono: ['Inconsolata'],
+        // Mono: ['Inconsolata'],
         mono: ['Roboto Mono'],
         sans: [
           // {
