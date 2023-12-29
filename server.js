@@ -31,11 +31,12 @@ await fastify.vite.ready();
 //   reply.send({hello: 'world'});
 // });
 
-fastify.listen({port: 3000}, function (error, address) {
+fastify.listen({port: 3000, host: '0.0.0.0'}, function (error, address) {
   if (error) {
     fastify.log.error(error);
     process.exit(1);
   }
+
   // Server is now listening on ${address}
 });
 
