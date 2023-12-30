@@ -1,6 +1,7 @@
 // Import path from 'node:path';
+import fs from 'node:fs/promises';
 import fastifyFactory from 'fastify';
-import fastifyStatic from '@fastify/static';
+// Import fastifyStatic from '@fastify/static';
 import FastifyVite from '@fastify/vite';
 
 const fastify = fastifyFactory({
@@ -23,6 +24,16 @@ await fastify.register(FastifyVite, {
 
 fastify.get('/', (request, reply) => {
   return reply.html();
+});
+
+fastify.get('/schedule', async (request, reply) => {
+  const scheduleRaw = await fs.readFile('./schedule.json', 'utf8');
+  const schedule = JSON.parse(scheduleRaw);
+  return schedule;
+});
+fastify.post('/schedule', async (request, reply) => {
+  await fs.writeFile('./schedule.json', request.body, 'utf8');
+  reply.code(201);
 });
 
 await fastify.vite.ready();

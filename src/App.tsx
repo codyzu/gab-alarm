@@ -2,44 +2,126 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import clsx from 'clsx';
 
 type ClockMode = 'day' | 'night';
+type Time = {hours: number; minutes: number};
+type DaySchedule = {day: Time; night: Time};
+type WeekSchedule = {
+  monday: DaySchedule;
+  tuesday: DaySchedule;
+  wednesday: DaySchedule;
+  thursday: DaySchedule;
+  friday: DaySchedule;
+  saturday: DaySchedule;
+  sunday: DaySchedule;
+  tomorrowMorning?: Time;
+};
+type Day = keyof WeekSchedule;
 
-const night = {hours: 20, minutes: 0};
-const day = {hours: 8, minutes: 0};
+const defaultSchedule: WeekSchedule = {
+  monday: {
+    day: {hours: 7, minutes: 0},
+    night: {hours: 20, minutes: 30},
+  },
+  tuesday: {
+    day: {hours: 7, minutes: 0},
+    night: {hours: 20, minutes: 30},
+  },
+  wednesday: {
+    day: {hours: 7, minutes: 0},
+    night: {hours: 20, minutes: 30},
+  },
+  thursday: {
+    day: {hours: 7, minutes: 0},
+    night: {hours: 20, minutes: 30},
+  },
+  friday: {
+    day: {hours: 7, minutes: 0},
+    night: {hours: 20, minutes: 30},
+  },
+  saturday: {
+    day: {hours: 8, minutes: 0},
+    night: {hours: 21, minutes: 0},
+  },
+  sunday: {
+    day: {hours: 8, minutes: 0},
+    night: {hours: 21, minutes: 0},
+  },
+};
+
+const days: Day[] = [
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+  'sunday',
+];
 
 function toMinutes(hours: number, minutes: number): number {
   const total = hours * 60 + minutes;
   return total;
 }
 
-const dayMinutes = toMinutes(day.hours, day.minutes);
-const nightMinutes = toMinutes(night.hours, night.minutes);
-
 const minutesPerDay = 60 * 24;
-
-function normalizeToDay(totalMinutes: number): number {
-  return (totalMinutes + minutesPerDay - dayMinutes) % minutesPerDay;
-}
-
-const nightNormalizedMinutes = normalizeToDay(nightMinutes);
 
 function App() {
   const [time, setTime] = useState(new Date());
+  const [schedule, setSchedule] = useState<WeekSchedule>(defaultSchedule);
 
-  const normalizedTime = normalizeToDay(
-    toMinutes(time.getHours(), time.getMinutes()),
-  );
+  const today = schedule[days[time.getDay() - 1]] as DaySchedule;
+  const yesterday = schedule[
+    days[(time.getDay() - 1 + 7 - 1) % 7]
+  ] as DaySchedule;
+  const tomorrow = schedule[days[(time.getDay() - 1 + 1) % 7]] as DaySchedule;
+
+  const nowMinutes = toMinutes(time.getHours(), time.getMinutes());
+  const todayDayMinutes = toMinutes(today.day.hours, today.day.minutes);
+  const todayNightMinutes = toMinutes(today.night.hours, today.night.minutes);
   const clockMode: ClockMode =
-    normalizedTime < nightNormalizedMinutes ? 'day' : 'night';
-  const percentComplete =
-    ((clockMode === 'day'
-      ? normalizedTime
-      : normalizedTime - nightNormalizedMinutes) *
-      100) /
-    (clockMode === 'day'
-      ? nightNormalizedMinutes
-      : minutesPerDay - nightNormalizedMinutes);
+    nowMinutes < todayDayMinutes || nowMinutes >= todayNightMinutes
+      ? 'night'
+      : 'day';
 
-  console.log('p', percentComplete);
+  let lowerLimit: Time;
+  let lowerLimitMinutes: number;
+  let upperLimit: Time;
+  let upperLimitMinutes: number;
+  // Let percent: number;
+
+  if (nowMinutes < todayDayMinutes) {
+    lowerLimit = yesterday.night;
+    lowerLimitMinutes = toMinutes(
+      yesterday.night.hours,
+      yesterday.night.minutes,
+    );
+  } else if (nowMinutes < todayNightMinutes) {
+    lowerLimit = today.day;
+    lowerLimitMinutes =
+      toMinutes(today.day.hours, today.day.minutes) + minutesPerDay;
+  } else {
+    lowerLimit = today.night;
+    lowerLimitMinutes =
+      toMinutes(today.night.hours, today.night.minutes) + minutesPerDay;
+  }
+
+  if (nowMinutes > todayNightMinutes) {
+    upperLimit = tomorrow.day;
+    upperLimitMinutes =
+      toMinutes(tomorrow.night.hours, tomorrow.night.minutes) +
+      minutesPerDay * 2;
+  } else if (nowMinutes > todayDayMinutes) {
+    upperLimit = today.night;
+    upperLimitMinutes =
+      toMinutes(today.night.hours, today.night.minutes) + minutesPerDay;
+  } else {
+    upperLimit = today.day;
+    upperLimitMinutes =
+      toMinutes(today.day.hours, today.day.minutes) + minutesPerDay;
+  }
+
+  const percent =
+    ((nowMinutes + minutesPerDay - lowerLimitMinutes) * 100) /
+    (upperLimitMinutes - lowerLimitMinutes);
 
   useEffect(() => {
     const handle = setInterval(() => {
@@ -48,16 +130,30 @@ function App() {
     }, 1000);
 
     return () => {
-      clearTimeout(handle);
+      clearInterval(handle);
     };
-  });
+  }, []);
 
-  // Const transition = useCallback(() => {
-  //   console.log('transition', clockMode);
-  //   setClockMode(clockMode === 'day' ? 'night' : 'day');
-  // }, [clockMode]);
+  useEffect(() => {
+    let cancel = false;
+    const handle = setInterval(async () => {
+      try {
+        const response = await fetch('/schedule');
+        const nextSchedule = (await response.json()) as WeekSchedule;
+        setSchedule(nextSchedule);
+      } catch (error) {
+        console.error(error);
+        setSchedule(defaultSchedule);
+      }
+    }, 5000);
 
-  // const keyHandlers = useMemo(
+    return () => {
+      cancel = true;
+      clearInterval(handle);
+    };
+  }, []);
+
+  // Const keyHandlers = useMemo(
   //   () =>
   //     new Map([
   //       // ['ArrowLeft', navPrevious],
@@ -128,25 +224,15 @@ function App() {
             clockMode === 'day' && 'bg-yellow',
             clockMode === 'night' && 'bg-pink-3',
           )}
-          style={{width: `${percentComplete}%`}}
+          style={{width: `${percent}%`}}
         />
         <div className="absolute bottom-0 left-0 font-mono text-10vh leading-none pr-2 mix-blend-difference">
-          {(clockMode === 'day' ? day : night).hours
-            .toString()
-            .padStart(2, '0')}
-          :
-          {(clockMode === 'day' ? day : night).minutes
-            .toString()
-            .padStart(2, '0')}
+          {lowerLimit.hours.toString().padStart(2, '0')}:
+          {lowerLimit.minutes.toString().padStart(2, '0')}
         </div>
         <div className="absolute bottom-0 right-0 font-mono text-10vh leading-none pr-2 mix-blend-difference">
-          {(clockMode === 'day' ? night : day).hours
-            .toString()
-            .padStart(2, '0')}
-          :
-          {(clockMode === 'day' ? night : day).minutes
-            .toString()
-            .padStart(2, '0')}
+          {upperLimit.hours.toString().padStart(2, '0')}:
+          {upperLimit.minutes.toString().padStart(2, '0')}
         </div>
       </div>
     </div>
