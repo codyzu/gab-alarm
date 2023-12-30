@@ -86,7 +86,6 @@ function App() {
   let lowerLimitMinutes: number;
   let upperLimit: Time;
   let upperLimitMinutes: number;
-  // Let percent: number;
 
   if (nowMinutes < todayDayMinutes) {
     lowerLimit = yesterday.night;
@@ -137,13 +136,15 @@ function App() {
   useEffect(() => {
     let cancel = false;
     const handle = setInterval(async () => {
-      try {
-        const response = await fetch('/schedule');
-        const nextSchedule = (await response.json()) as WeekSchedule;
+      const response = await fetch('/schedule');
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      const nextSchedule = (await response.json()) as WeekSchedule;
+
+      if (!cancel) {
         setSchedule(nextSchedule);
-      } catch (error) {
-        console.error(error);
-        setSchedule(defaultSchedule);
       }
     }, 5000);
 
