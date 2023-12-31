@@ -68,11 +68,12 @@ function App() {
   const [time, setTime] = useState(new Date());
   const [schedule, setSchedule] = useState<WeekSchedule>(defaultSchedule);
 
-  const today = schedule[days[time.getDay() - 1]] as DaySchedule;
-  const yesterday = schedule[
-    days[(time.getDay() - 1 + 7 - 1) % 7]
-  ] as DaySchedule;
-  const tomorrow = schedule[days[(time.getDay() - 1 + 1) % 7]] as DaySchedule;
+  const todayName = days[(time.getDay() - 1 + 7) % 7];
+  const yesterdayName = days[(time.getDay() - 1 + 7 - 1) % 7];
+  const tomorrowName = days[time.getDay() - 1 + 1];
+  const today = schedule[todayName] as DaySchedule;
+  const yesterday = schedule[yesterdayName] as DaySchedule;
+  const tomorrow = schedule[tomorrowName] as DaySchedule;
 
   const nowMinutes = toMinutes(time.getHours(), time.getMinutes());
   const todayDayMinutes = toMinutes(today.day.hours, today.day.minutes);
