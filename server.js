@@ -5,7 +5,16 @@ import fastifyFactory from 'fastify';
 import FastifyVite from '@fastify/vite';
 
 const fastify = fastifyFactory({
-  logger: true,
+  // Logger: true,
+  logger: {
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        translateTime: 'HH:MM:ss Z',
+        ignore: 'pid,hostname',
+      },
+    },
+  },
 });
 
 console.log(new URL('../dist', import.meta.url).path);
