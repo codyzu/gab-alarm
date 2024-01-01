@@ -1,5 +1,8 @@
 import {useEffect, useState} from 'react';
 import clsx from 'clsx';
+// @ts-expect-error bad package exports
+import {useSound} from 'use-sound';
+import owl from './assets/owl.mp3';
 
 type ClockMode = 'day' | 'night';
 type Time = {hours: number; minutes: number};
@@ -67,6 +70,11 @@ const minutesPerDay = 60 * 24;
 function App() {
   const [time, setTime] = useState(new Date());
   const [schedule, setSchedule] = useState<WeekSchedule>(defaultSchedule);
+  const [modeOverride, setModeOverride] = useState<
+    {mode: ClockMode; timeoutTimestamp: number} | undefined
+  >(undefined);
+
+  const [play] = (useSound as (url: any) => [() => void])(owl);
 
   const todayName = days[(time.getDay() - 1 + 7) % 7];
   const yesterdayName = days[(time.getDay() - 1 + 7 - 1) % 7];
@@ -78,10 +86,13 @@ function App() {
   const nowMinutes = toMinutes(time.getHours(), time.getMinutes());
   const todayDayMinutes = toMinutes(today.day.hours, today.day.minutes);
   const todayNightMinutes = toMinutes(today.night.hours, today.night.minutes);
-  const clockMode: ClockMode =
+
+  const actualMode: ClockMode =
     nowMinutes < todayDayMinutes || nowMinutes >= todayNightMinutes
       ? 'night'
       : 'day';
+
+  const clockMode: ClockMode = modeOverride?.mode ?? actualMode;
 
   let lowerLimit: Time;
   let lowerLimitMinutes: number;
@@ -127,12 +138,15 @@ function App() {
     const handle = setInterval(() => {
       const nextTime = new Date();
       setTime(nextTime);
+      if (modeOverride && nextTime.getTime() > modeOverride.timeoutTimestamp) {
+        setModeOverride(undefined);
+      }
     }, 1000);
 
     return () => {
       clearInterval(handle);
     };
-  }, []);
+  }, [modeOverride]);
 
   useEffect(() => {
     let cancel = false;
@@ -188,19 +202,25 @@ function App() {
   return (
     <div
       className={clsx(
-        'items-center gap-10vh align-start w-full transition transition-all duration-1000 ease-linear select-none',
+        'items-center gap-10dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none',
         clockMode === 'night' && 'bg-black',
         clockMode === 'day' && 'bg-blue-6',
         // ClockMode === 'day' && 'bg-gradient-to-t from-orange-6 to-blue-6',
         // clockMode === 'night' && 'bg-gradient-to-t from-pink-6 to-black'
       )}
-      // OnClick={transition}
+      onClick={() => {
+        setModeOverride({
+          mode: clockMode === 'day' ? 'night' : 'day',
+          timeoutTimestamp: time.getTime() + 5000,
+        });
+        play();
+      }}
     >
-      <div className="h-60vh p-2 aspect-square box-border">
+      <div className="h-60dvh p-2 aspect-square box-border">
         <div className="w-full h-full relative">
           <div
             className={clsx(
-              'animate-fill-forwards absolute top-0 left-0 h-full w-full animate-duration-2000 text-yellow i-pixelarticons-sun-alt',
+              'animate-fill-forwards absolute top-0 left-0 h-full w-full animate-duration-2000 text-yellow i-fluent-emoji-owl',
               clockMode === 'day'
                 ? 'animate-bounce-in-up'
                 : 'animate-bounce-out-up',
@@ -216,23 +236,23 @@ function App() {
           />
         </div>
       </div>
-      <div className="h-30vh w-full relative">
-        <div className="leading-none text-20vh pb-1vh self-center font-mono">
+      <div className="h-30dvh w-full relative">
+        <div className="leading-none text-20dvh pb-1dvh self-center font-mono">
           {time.getHours()}:{time.getMinutes().toString().padStart(2, '0')}
         </div>
         <div
           className={clsx(
-            'w-100vw h-10vh transition-all duration-500 ease-out',
+            'w-100dvw h-10dvh transition-all duration-500 ease-out',
             clockMode === 'day' && 'bg-yellow',
             clockMode === 'night' && 'bg-pink-3',
           )}
           style={{width: `${percent}%`}}
         />
-        <div className="absolute bottom-0 left-0 font-mono text-10vh leading-none pr-2 mix-blend-difference">
+        <div className="absolute bottom-0 left-0 font-mono text-10dvh leading-none pr-2 mix-blend-difference">
           {lowerLimit.hours.toString().padStart(2, '0')}:
           {lowerLimit.minutes.toString().padStart(2, '0')}
         </div>
-        <div className="absolute bottom-0 right-0 font-mono text-10vh leading-none pr-2 mix-blend-difference">
+        <div className="absolute bottom-0 right-0 font-mono text-10dvh leading-none pr-2 mix-blend-difference">
           {upperLimit.hours.toString().padStart(2, '0')}:
           {upperLimit.minutes.toString().padStart(2, '0')}
         </div>
