@@ -2,7 +2,8 @@ import {useEffect, useState} from 'react';
 import clsx from 'clsx';
 // @ts-expect-error bad package exports
 import {useSound} from 'use-sound';
-import owl from './assets/owl.mp3';
+import wake from './assets/bong.mp3';
+import sleep from './assets/bell.mp3';
 
 type ClockMode = 'day' | 'night';
 type Time = {hours: number; minutes: number};
@@ -74,7 +75,8 @@ function App() {
     {mode: ClockMode; timeoutTimestamp: number} | undefined
   >(undefined);
 
-  const [play] = (useSound as (url: any) => [() => void])(owl);
+  const [playWake] = (useSound as (url: any) => [() => void])(wake);
+  const [playSleep] = (useSound as (url: any) => [() => void])(sleep);
 
   const todayName = days[(time.getDay() - 1 + 7) % 7];
   const yesterdayName = days[(time.getDay() - 1 + 7 - 1) % 7];
@@ -93,6 +95,18 @@ function App() {
       : 'day';
 
   const clockMode: ClockMode = modeOverride?.mode ?? actualMode;
+
+  const [previousMode, setPreviousMode] = useState(actualMode);
+  useEffect(() => {
+    if (actualMode !== previousMode) {
+      setPreviousMode(actualMode);
+      if (actualMode === 'day') {
+        playWake();
+      } else {
+        playSleep();
+      }
+    }
+  }, [actualMode, previousMode, playSleep, playWake]);
 
   let lowerLimit: Time;
   let lowerLimitMinutes: number;
@@ -140,6 +154,7 @@ function App() {
       setTime(nextTime);
       if (modeOverride && nextTime.getTime() > modeOverride.timeoutTimestamp) {
         setModeOverride(undefined);
+        // PlayBell();
       }
     }, 1000);
 
@@ -204,16 +219,22 @@ function App() {
       className={clsx(
         'items-center gap-10dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none',
         clockMode === 'night' && 'bg-black',
-        clockMode === 'day' && 'bg-blue-6',
+        clockMode === 'day' && 'bg-black',
         // ClockMode === 'day' && 'bg-gradient-to-t from-orange-6 to-blue-6',
         // clockMode === 'night' && 'bg-gradient-to-t from-pink-6 to-black'
       )}
       onClick={() => {
+        const mode = clockMode === 'day' ? 'night' : 'day';
         setModeOverride({
-          mode: clockMode === 'day' ? 'night' : 'day',
-          timeoutTimestamp: time.getTime() + 5000,
+          mode,
+          timeoutTimestamp: time.getTime() + 7000,
         });
-        play();
+
+        if (mode === 'day') {
+          playWake();
+        } else {
+          playSleep();
+        }
       }}
     >
       <div className="h-60dvh p-2 aspect-square box-border">
@@ -228,7 +249,7 @@ function App() {
           />
           <div
             className={clsx(
-              'animate-fill-forwards absolute top-0 left-0 h-full w-full animate-duration-2000 text-pink-3 i-pixelarticons-moon-star',
+              'animate-fill-forwards absolute top-0 left-0 h-full w-full animate-duration-2000 text-pink-3 i-fluent-emoji-sloth',
               clockMode === 'night'
                 ? 'animate-bounce-in-up'
                 : 'animate-bounce-out-up',
@@ -243,8 +264,8 @@ function App() {
         <div
           className={clsx(
             'w-100dvw h-10dvh transition-all duration-500 ease-out',
-            clockMode === 'day' && 'bg-yellow',
-            clockMode === 'night' && 'bg-pink-3',
+            clockMode === 'day' && 'bg-yellow-500',
+            clockMode === 'night' && 'bg-pink-300',
           )}
           style={{width: `${percent}%`}}
         />
