@@ -263,9 +263,11 @@ function App() {
         </div>
         <div
           className={clsx(
-            'w-100dvw h-10dvh transition-all duration-500 ease-out',
-            clockMode === 'day' && 'bg-yellow-500',
-            clockMode === 'night' && 'bg-pink-300',
+            'w-100dvw h-10dvh transition-all duration-500 ease-out rounded-rt-lg',
+            clockMode === 'day' &&
+              'bg-gradient-to-r bg-gradient-from-green-600 bg-gradient-to-blue-700',
+            clockMode === 'night' &&
+              'bg-gradient-to-r bg-gradient-from-pink bg-gradient-to-blue-700',
           )}
           style={{width: `${percent}%`}}
         />
