@@ -35,6 +35,10 @@ fastify.get('/', (request, reply) => {
   return reply.html();
 });
 
+fastify.get('/admin', (request, reply) => {
+  return reply.html();
+});
+
 fastify.get('/schedule', async (request, reply) => {
   const scheduleRaw = await fs.readFile('./schedule.json', 'utf8');
   const schedule = JSON.parse(scheduleRaw);
