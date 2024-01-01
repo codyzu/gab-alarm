@@ -218,7 +218,7 @@ function App() {
     <div
       className={clsx(
         'items-center gap-10dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none',
-        clockMode === 'night' && 'bg-black',
+        clockMode === 'night' && 'bg-black text-gray-400',
         clockMode === 'day' && 'bg-black',
         // ClockMode === 'day' && 'bg-gradient-to-t from-orange-6 to-blue-6',
         // clockMode === 'night' && 'bg-gradient-to-t from-pink-6 to-black'
