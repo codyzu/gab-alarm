@@ -2,8 +2,8 @@ import {useEffect, useState} from 'react';
 import clsx from 'clsx';
 // @ts-expect-error bad package exports
 import {useSound} from 'use-sound';
-import wake from './assets/bong.mp3';
-import sleep from './assets/bell.mp3';
+import wake from './assets/rooster.mp3';
+import sleep from './assets/dingdong.mp3';
 
 type ClockMode = 'day' | 'night';
 type Time = {hours: number; minutes: number};
@@ -217,7 +217,7 @@ function App() {
   return (
     <div
       className={clsx(
-        'items-center gap-10dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none',
+        'items-center gap-4dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none',
         clockMode === 'night' && 'bg-black text-gray-400',
         clockMode === 'day' && 'bg-black',
         // ClockMode === 'day' && 'bg-gradient-to-t from-orange-6 to-blue-6',
@@ -237,11 +237,11 @@ function App() {
         }
       }}
     >
-      <div className="h-60dvh p-2 aspect-square box-border">
+      <div className="h-66dvh p-2 aspect-square box-border">
         <div className="w-full h-full relative">
           <div
             className={clsx(
-              'animate-fill-forwards absolute top-0 left-0 h-full w-full animate-duration-2000 text-yellow i-fluent-emoji-owl',
+              'animate-fill-forwards absolute top-0 left-0 h-full w-full animate-duration-2000 text-yellow i-fluent-emoji-rooster',
               clockMode === 'day'
                 ? 'animate-bounce-in-up'
                 : 'animate-bounce-out-up',
