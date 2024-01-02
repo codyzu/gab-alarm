@@ -3,7 +3,7 @@ import clsx from 'clsx';
 // @ts-expect-error bad package exports
 import {useSound} from 'use-sound';
 import wake from './assets/rooster.mp3';
-import sleep from './assets/dingdong.mp3';
+import sleep from './assets/cricket.mp3';
 
 type ClockMode = 'day' | 'night';
 type Time = {hours: number; minutes: number};
@@ -217,7 +217,7 @@ function App() {
   return (
     <div
       className={clsx(
-        'items-center gap-4dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none relative',
+        'items-center gap-2dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none relative',
         clockMode === 'night' && 'bg-black text-gray-400',
         clockMode === 'day' && 'bg-black',
         // ClockMode === 'day' && 'bg-gradient-to-t from-orange-6 to-blue-6',
@@ -274,7 +274,7 @@ function App() {
       >
         <div className="i-fluent-emoji-full-moon-face w-full h-full animate-longtada" />
       </div>
-      <div className="h-66dvh p-2 aspect-square box-border relative">
+      <div className="h-68dvh p-2 aspect-square box-border relative">
         <div className="w-full h-full relative">
           <div
             className={clsx(
