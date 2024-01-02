@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import fastifyFactory from 'fastify';
 // Import fastifyStatic from '@fastify/static';
 import FastifyVite from '@fastify/vite';
+import fastifyStatic from '@fastify/static';
 
 const fastify = fastifyFactory({
   // Logger: true,
@@ -15,6 +16,10 @@ const fastify = fastifyFactory({
       },
     },
   },
+});
+
+await fastify.register(fastifyStatic, {
+  root: new URL('public', import.meta.url),
 });
 
 console.log(new URL('../dist', import.meta.url).path);
