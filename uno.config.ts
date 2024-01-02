@@ -96,45 +96,31 @@ export default defineConfig({
   theme: {
     animation: {
       keyframes: {
-        longbounce: `{
-            0%, 100% { transform: translateY(+100%) }
-            50% { transform: translateY(0) }
-          }`,
-        emoji: `{
-          from,to {
-            transform: translate3d(0,0,0);
+        longtada: `{
+          from {
+            transform:scale3d(1,1,1)
           }
-          0% {
-            bottom: -100px;
-            opacity: 1;
+          1%,2% {
+            transform:scale3d(0.9,0.9,0.9) rotate3d(0,0,1,-3deg)
           }
-          10%,30%,50%,70%,90% {
-            transform: translate3d(calc(var(--reaction-bounce-distance) * -1),0,0);
+          3%,5%,7%,9% {
+            transform:scale3d(1.1,1.1,1.1) rotate3d(0,0,1,3deg)
           }
-          20%,40%,60%,80% {
-            transform: translate3d(var(--reaction-bounce-distance),0,0);
+          4%,6%,8% {
+            transform:scale3d(1.1,1.1,1.1) rotate3d(0,0,1,-3deg)
           }
-          60% {
-            opacity: 1;
-          }
-          100% {
-            bottom: 90vh;
-            opacity: 0;
+          10% {
+            transform:scale3d(1,1,1)
           }
         }`,
       },
       durations: {
-        longbounce: '120s',
-        emoji: 'var(--reaction-duration)',
+        longtada: '12s',
       },
-      timingFns: {
-        longbounce: 'ease-in-out',
-        emoji: 'ease-out',
-      },
+      timingFns: {},
       counts: {
-        longbounce: 'infinite',
+        longtada: 'infinite',
       },
-      // Wiggle: 'wiggle 1s ease-in-out infinite',
     },
   },
 });

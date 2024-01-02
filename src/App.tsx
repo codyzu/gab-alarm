@@ -217,7 +217,7 @@ function App() {
   return (
     <div
       className={clsx(
-        'items-center gap-4dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none',
+        'items-center gap-4dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none relative',
         clockMode === 'night' && 'bg-black text-gray-400',
         clockMode === 'day' && 'bg-black',
         // ClockMode === 'day' && 'bg-gradient-to-t from-orange-6 to-blue-6',
@@ -256,6 +256,26 @@ function App() {
             )}
           />
         </div>
+      </div>
+      <div
+        className={clsx(
+          'absolute top-2dvh right-2dvh h-20dvh w-20dvh animate-fill-forwards',
+          clockMode === 'day'
+            ? 'animate-bounce-in-up'
+            : 'animate-bounce-out-up',
+        )}
+      >
+        <div className="i-fluent-emoji-sun-with-face w-full h-full animate-longtada" />
+      </div>
+      <div
+        className={clsx(
+          'absolute top-2dvh right-2dvh h-20dvh w-20dvh animate-fill-forwards',
+          clockMode === 'night'
+            ? 'animate-bounce-in-up'
+            : 'animate-bounce-out-up',
+        )}
+      >
+        <div className="i-fluent-emoji-full-moon-face w-full h-full animate-longtada" />
       </div>
       <div className="h-30dvh w-full relative">
         <div className="leading-none text-20dvh pb-1dvh self-center font-mono">
