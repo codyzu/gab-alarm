@@ -96,17 +96,17 @@ function App() {
 
   const clockMode: ClockMode = modeOverride?.mode ?? actualMode;
 
-  const [previousMode, setPreviousMode] = useState(actualMode);
+  const [previousMode, setPreviousMode] = useState(clockMode);
   useEffect(() => {
-    if (actualMode !== previousMode) {
-      setPreviousMode(actualMode);
-      if (actualMode === 'day') {
+    if (clockMode !== previousMode) {
+      setPreviousMode(clockMode);
+      if (clockMode === 'day') {
         playWake();
       } else {
         playSleep();
       }
     }
-  }, [actualMode, previousMode, playSleep, playWake]);
+  }, [clockMode, previousMode, playSleep, playWake]);
 
   let lowerLimit: Time;
   let lowerLimitMinutes: number;
@@ -237,7 +237,44 @@ function App() {
         }
       }}
     >
-      <div className="h-66dvh p-2 aspect-square box-border">
+      <div
+        className={clsx(
+          'absolute top-2dvh h-96dvh aspect-square max-w-96dvh rounded-full',
+          'bg-gradient-conic bg-gradient-to-black to-0%',
+          `from-${Math.round(percent)}%`,
+          clockMode === 'day' && 'bg-gradient-from-yellow',
+          clockMode === 'night' && 'bg-gradient-from-sky-800',
+        )}
+      >
+        <div className="w-full h-full bg-gradient-radial bg-gradient-from-black from-96% bg-gradient-shape-[closest-side] bg-gradient-to-transparent to-97%">
+          <progress
+            value={Math.round(percent)}
+            max={100}
+            className="hidden w-none h-none"
+          />
+        </div>
+      </div>
+      <div
+        className={clsx(
+          'absolute top-2dvh right-2dvh h-24dvh w-24dvh animate-fill-forwards',
+          clockMode === 'day'
+            ? 'animate-bounce-in-up'
+            : 'animate-bounce-out-up',
+        )}
+      >
+        <div className="i-fluent-emoji-sun-with-face w-full h-full animate-longtada" />
+      </div>
+      <div
+        className={clsx(
+          'absolute top-2dvh right-2dvh h-24dvh w-24dvh animate-fill-forwards',
+          clockMode === 'night'
+            ? 'animate-bounce-in-up'
+            : 'animate-bounce-out-up',
+        )}
+      >
+        <div className="i-fluent-emoji-full-moon-face w-full h-full animate-longtada" />
+      </div>
+      <div className="h-66dvh p-2 aspect-square box-border relative">
         <div className="w-full h-full relative">
           <div
             className={clsx(
@@ -257,45 +294,22 @@ function App() {
           />
         </div>
       </div>
-      <div
-        className={clsx(
-          'absolute top-2dvh right-2dvh h-20dvh w-20dvh animate-fill-forwards',
-          clockMode === 'day'
-            ? 'animate-bounce-in-up'
-            : 'animate-bounce-out-up',
-        )}
-      >
-        <div className="i-fluent-emoji-sun-with-face w-full h-full animate-longtada" />
-      </div>
-      <div
-        className={clsx(
-          'absolute top-2dvh right-2dvh h-20dvh w-20dvh animate-fill-forwards',
-          clockMode === 'night'
-            ? 'animate-bounce-in-up'
-            : 'animate-bounce-out-up',
-        )}
-      >
-        <div className="i-fluent-emoji-full-moon-face w-full h-full animate-longtada" />
-      </div>
       <div className="h-30dvh w-full relative">
         <div className="leading-none text-20dvh pb-1dvh self-center font-mono">
           {time.getHours()}:{time.getMinutes().toString().padStart(2, '0')}
         </div>
-        <div
-          className={clsx(
-            'w-100dvw h-10dvh transition-all duration-500 ease-out rounded-rt-lg',
-            clockMode === 'day' &&
-              'bg-gradient-to-r bg-gradient-from-green-600 bg-gradient-to-blue-700',
-            clockMode === 'night' &&
-              'bg-gradient-to-r bg-gradient-from-pink bg-gradient-to-blue-700',
-          )}
-          style={{width: `${percent}%`}}
-        />
         <div className="absolute bottom-0 left-0 font-mono text-10dvh leading-none pr-2 mix-blend-difference">
           {lowerLimit.hours.toString().padStart(2, '0')}:
           {lowerLimit.minutes.toString().padStart(2, '0')}
         </div>
-        <div className="absolute bottom-0 right-0 font-mono text-10dvh leading-none pr-2 mix-blend-difference">
+        <div className="absolute bottom-0 right-0 font-mono text-10dvh leading-none pr-2 mix-blend-difference flex-row items-center gap-0 justify-end">
+          <div
+            className={clsx(
+              'h-7dvh aspect-square',
+              clockMode === 'night' && 'i-fluent-emoji-sun-with-face',
+              clockMode === 'day' && 'i-fluent-emoji-full-moon-face',
+            )}
+          />
           {upperLimit.hours.toString().padStart(2, '0')}:
           {upperLimit.minutes.toString().padStart(2, '0')}
         </div>

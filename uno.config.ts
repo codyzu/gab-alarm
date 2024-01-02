@@ -123,4 +123,5 @@ export default defineConfig({
       },
     },
   },
+  safelist: Array.from({length: 101}, (_, i) => `from-${i}%`),
 });
