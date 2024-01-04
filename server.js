@@ -85,13 +85,12 @@ fastify.post('/morning', async (request, reply) => {
 });
 
 function playSound(path) {
-  return execa('mplayer', [path]);
+  return execa('mplayer', ['-quiet', path]);
 }
 
 function setBrightness(level) {
   return execa(
-    'sudo',
-    [`echo ${level} > sudo tee /sys/class/backlight/10-0045/brightness`],
+    `echo ${level} > sudo tee /sys/class/backlight/10-0045/brightness`,
     {shell: true},
   );
 }
