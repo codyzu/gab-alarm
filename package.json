@@ -19,6 +19,7 @@
     "@tanstack/router-devtools": "^1.0.6",
     "@unocss/reset": "^0.58.3",
     "clsx": "^2.0.0",
+    "execa": "^8.0.1",
     "fastify": "^4.25.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -4,6 +4,7 @@ import fastifyFactory from 'fastify';
 // Import fastifyStatic from '@fastify/static';
 import FastifyVite from '@fastify/vite';
 import fastifyStatic from '@fastify/static';
+import {execa} from 'execa';
 
 const fastify = fastifyFactory({
   // Logger: true,
@@ -54,6 +55,46 @@ fastify.post('/schedule', async (request, reply) => {
   );
   reply.code(201);
 });
+
+fastify.post('/morning', async (request, reply) => {
+  // Try {
+
+  const result = await Promise.allSettled([
+    playSound('./client/src/assets/rooster.mp3'),
+    setBrightness(255),
+  ]);
+
+  if (result.some((r) => r.status === 'rejected')) {
+    reply.code(500);
+  } else {
+    reply.code(200);
+  }
+
+  return result;
+
+  // Return await fs.readdir('.');
+  // Const result = await Promise.allSettled([
+  //   execa('mplayer', ['-quiet', './client/src/assets/rooster.mp3'], execa([])),
+  // ]);
+  // Const {stdout} = await ;
+  // return stdout;
+  // } catch {
+  //   reply.code(500);
+  //   return
+  // }
+});
+
+function playSound(path) {
+  return execa('mplayer', [path]);
+}
+
+function setBrightness(level) {
+  return execa(
+    'sudo',
+    [`echo ${level} > sudo tee /sys/class/backlight/10-0045/brightness`],
+    {shell: true},
+  );
+}
 
 await fastify.vite.ready();
 
