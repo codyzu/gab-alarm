@@ -94,9 +94,11 @@ function App() {
     if (clockMode !== previousMode) {
       setPreviousMode(clockMode);
       if (clockMode === 'day') {
-        playWake();
+        void fetch('/morning', {method: 'POST'});
+        // PlayWake();
       } else {
-        playSleep();
+        void fetch('/night', {method: 'POST'});
+        // PlaySleep();
       }
     }
   }, [clockMode, previousMode, playSleep, playWake]);
@@ -223,11 +225,11 @@ function App() {
           timeoutTimestamp: time.getTime() + 7000,
         });
 
-        if (mode === 'day') {
-          playWake();
-        } else {
-          playSleep();
-        }
+        // If (mode === 'day') {
+        //   playWake();
+        // } else {
+        //   playSleep();
+        // }
       }}
     >
       <div
