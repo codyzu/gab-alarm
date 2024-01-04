@@ -57,8 +57,6 @@ fastify.post('/schedule', async (request, reply) => {
 });
 
 fastify.post('/morning', async (request, reply) => {
-  // Try {
-
   const result = await Promise.allSettled([
     playSound('./client/src/assets/rooster.mp3'),
     setBrightness(255),
@@ -71,17 +69,21 @@ fastify.post('/morning', async (request, reply) => {
   }
 
   return result;
+});
 
-  // Return await fs.readdir('.');
-  // Const result = await Promise.allSettled([
-  //   execa('mplayer', ['-quiet', './client/src/assets/rooster.mp3'], execa([])),
-  // ]);
-  // Const {stdout} = await ;
-  // return stdout;
-  // } catch {
-  //   reply.code(500);
-  //   return
-  // }
+fastify.post('/night', async (request, reply) => {
+  const result = await Promise.allSettled([
+    playSound('./client/src/assets/cricket.mp3'),
+    setBrightness(255),
+  ]);
+
+  if (result.some((r) => r.status === 'rejected')) {
+    reply.code(500);
+  } else {
+    reply.code(200);
+  }
+
+  return result;
 });
 
 function playSound(path) {
