@@ -68,7 +68,7 @@ button:focus-visible {
 } */
 
 body {
-  --uno: m-0 bg-black text-white font-sans text-xl tracking-normal overflow-hidden;
+  --uno: m-0 bg-black text-white font-sans text-xl tracking-normal;
 }
 
 div {

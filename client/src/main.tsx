@@ -1,6 +1,7 @@
 // eslint-disable-line unicorn/filename-case
 import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom/client';
+import '@unocss/reset/tailwind.css';
 import 'uno.css';
 import {
   RootRoute,

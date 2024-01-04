@@ -20,6 +20,9 @@ dependencies:
   '@tanstack/router-devtools':
     specifier: ^1.0.6
     version: 1.0.6(react-dom@18.2.0)(react@18.2.0)
+  '@unocss/reset':
+    specifier: ^0.58.3
+    version: 0.58.3
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
@@ -1453,6 +1456,10 @@ packages:
   /@unocss/reset@0.58.2:
     resolution: {integrity: sha512-ZzskZzrs7fPoKWrSpF1vehIr8TI7u4eS+MSurE0qUXatg0/nsXAZvaFYu0obu1kWrmnHyzA7G+m6LMX1h1tT7Q==}
     dev: true
+
+  /@unocss/reset@0.58.3:
+    resolution: {integrity: sha512-Q2KiRQlam2iYsTZgKdvnXEfUN4TA2oVpGIVD9Wa0ggs0XlYj5aOo0g0+4Tgqqn+YaviZQeJKnDs/JWE+ygHhZA==}
+    dev: false
 
   /@unocss/rule-utils@0.58.2:
     resolution: {integrity: sha512-cbrMvSuLf2ZMqJqmiCzIrrH59wEhnH4Ui/dnq/goWAqFe042nET8TcHz++2npc2T8EZlCMoC3zstCJzVbxGCVQ==}

@@ -50,7 +50,12 @@ fastify.get('/schedule', async (request, reply) => {
   return schedule;
 });
 fastify.post('/schedule', async (request, reply) => {
-  await fs.writeFile('./schedule.json', request.body, 'utf8');
+  console.log('body', request.body);
+  await fs.writeFile(
+    './schedule.json',
+    JSON.stringify(request.body, null, 2),
+    'utf8',
+  );
   reply.code(201);
 });
 

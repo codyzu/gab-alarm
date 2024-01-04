@@ -4,21 +4,14 @@ import clsx from 'clsx';
 import {useSound} from 'use-sound';
 import wake from './assets/rooster.mp3';
 import sleep from './assets/cricket.mp3';
+import {
+  type Day,
+  type DaySchedule,
+  type Time,
+  type WeekSchedule,
+} from './schedule.types';
 
 type ClockMode = 'day' | 'night';
-type Time = {hours: number; minutes: number};
-type DaySchedule = {day: Time; night: Time};
-type WeekSchedule = {
-  monday: DaySchedule;
-  tuesday: DaySchedule;
-  wednesday: DaySchedule;
-  thursday: DaySchedule;
-  friday: DaySchedule;
-  saturday: DaySchedule;
-  sunday: DaySchedule;
-  tomorrowMorning?: Time;
-};
-type Day = keyof WeekSchedule;
 
 const defaultSchedule: WeekSchedule = {
   monday: {
@@ -217,7 +210,7 @@ function App() {
   return (
     <div
       className={clsx(
-        'items-center gap-2dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none relative',
+        'items-center gap-2dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none relative overflow-hidden',
         clockMode === 'night' && 'bg-black text-gray-400',
         clockMode === 'day' && 'bg-black',
         // ClockMode === 'day' && 'bg-gradient-to-t from-orange-6 to-blue-6',
