@@ -89,10 +89,7 @@ function playSound(path) {
 }
 
 function setBrightness(level) {
-  return execa(
-    `echo ${level} > sudo tee /sys/class/backlight/10-0045/brightness`,
-    {shell: true},
-  );
+  return execa('sudo', ['./bin/set-brightness.sh', level]);
 }
 
 await fastify.vite.ready();
