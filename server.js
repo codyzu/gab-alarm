@@ -9,11 +9,7 @@ const fastify = fastifyFactory({
   // Logger: true,
   logger: {
     transport: {
-      target: 'pino-pretty',
-      options: {
-        translateTime: 'HH:MM:ss Z',
-        ignore: 'pid,hostname',
-      },
+      target: '@fastify/one-line-logger',
     },
   },
 });
