@@ -74,7 +74,7 @@ fastify.post('/morning', async (request, reply) => {
 fastify.post('/night', async (request, reply) => {
   const result = await Promise.allSettled([
     playSound('./client/src/assets/cricket.mp3'),
-    setBrightness(255),
+    setBrightness(0),
   ]);
 
   if (result.some((r) => r.status === 'rejected')) {
