@@ -2,5 +2,5 @@
 
 git pull
 pnpm install
-pnpm build dev
+pnpm run build
 pm2 restart gabalarm
