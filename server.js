@@ -91,7 +91,7 @@ function playSound(path) {
 }
 
 function setBrightness(level) {
-  return execa('sudo', ['./bin/set-brightness.sh', level]);
+  return execa('sudo', ['-n', './bin/set-brightness.sh', level]);
 }
 
 await fastify.vite.ready();
