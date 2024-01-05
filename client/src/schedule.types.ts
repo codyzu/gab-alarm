@@ -1,5 +1,6 @@
 export type Time = {hours: number; minutes: number};
-export type DaySchedule = {day: Time; night: Time};
+export type Transition = {sound: boolean} & Time;
+export type DaySchedule = {day: Transition; night: Transition};
 export type WeekSchedule = {
   monday: DaySchedule;
   tuesday: DaySchedule;
@@ -8,6 +9,7 @@ export type WeekSchedule = {
   friday: DaySchedule;
   saturday: DaySchedule;
   sunday: DaySchedule;
-  tomorrowMorning?: Time;
 };
+export type Override = {transition: Transition; expired: boolean};
+export type Settings = {override: Override} & WeekSchedule;
 export type Day = keyof WeekSchedule;

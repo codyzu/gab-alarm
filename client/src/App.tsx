@@ -15,32 +15,32 @@ type ClockMode = 'day' | 'night';
 
 const defaultSchedule: WeekSchedule = {
   monday: {
-    day: {hours: 7, minutes: 0},
-    night: {hours: 20, minutes: 30},
+    day: {hours: 7, minutes: 0, sound: true},
+    night: {hours: 20, minutes: 30, sound: true},
   },
   tuesday: {
-    day: {hours: 7, minutes: 0},
-    night: {hours: 20, minutes: 30},
+    day: {hours: 7, minutes: 0, sound: true},
+    night: {hours: 20, minutes: 30, sound: true},
   },
   wednesday: {
-    day: {hours: 7, minutes: 0},
-    night: {hours: 20, minutes: 30},
+    day: {hours: 7, minutes: 0, sound: true},
+    night: {hours: 20, minutes: 30, sound: true},
   },
   thursday: {
-    day: {hours: 7, minutes: 0},
-    night: {hours: 20, minutes: 30},
+    day: {hours: 7, minutes: 0, sound: true},
+    night: {hours: 20, minutes: 30, sound: true},
   },
   friday: {
-    day: {hours: 7, minutes: 0},
-    night: {hours: 20, minutes: 30},
+    day: {hours: 7, minutes: 0, sound: true},
+    night: {hours: 20, minutes: 30, sound: true},
   },
   saturday: {
-    day: {hours: 8, minutes: 0},
-    night: {hours: 21, minutes: 0},
+    day: {hours: 8, minutes: 0, sound: false},
+    night: {hours: 21, minutes: 0, sound: true},
   },
   sunday: {
-    day: {hours: 8, minutes: 0},
-    night: {hours: 21, minutes: 0},
+    day: {hours: 8, minutes: 0, sound: false},
+    night: {hours: 21, minutes: 0, sound: true},
   },
 };
 
