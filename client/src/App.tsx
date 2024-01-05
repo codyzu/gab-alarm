@@ -263,10 +263,6 @@ function App() {
         <div className="leading-none text-20dvh pb-1dvh self-center font-mono">
           {time.getHours()}:{time.getMinutes().toString().padStart(2, '0')}
         </div>
-        <div className="absolute bottom-0 left-0 font-mono text-10dvh leading-none pr-2 mix-blend-difference">
-          {lowerLimit.hours.toString().padStart(2, '0')}:
-          {lowerLimit.minutes.toString().padStart(2, '0')}
-        </div>
         <div className="absolute bottom-0 right-0 font-mono text-10dvh leading-none pr-2 mix-blend-difference flex-row items-center gap-0 justify-end">
           <div
             className={clsx(
