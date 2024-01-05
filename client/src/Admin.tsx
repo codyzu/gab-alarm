@@ -1,39 +1,8 @@
 import {useCallback, useEffect, useState} from 'react';
 import DayControl from './DayControl';
-import {type Time, type Day, type Settings} from './schedule.types';
+import {type Time, type Day, settingsSchema} from './schedule.types';
 import TransitionControl from './TransitionControl';
-
-const defaultSchedule: Settings = {
-  override: {transition: {hours: 7, minutes: 0, sound: false}, expired: true},
-  monday: {
-    day: {hours: 7, minutes: 0, sound: true},
-    night: {hours: 20, minutes: 30, sound: true},
-  },
-  tuesday: {
-    day: {hours: 7, minutes: 0, sound: true},
-    night: {hours: 20, minutes: 30, sound: true},
-  },
-  wednesday: {
-    day: {hours: 7, minutes: 0, sound: true},
-    night: {hours: 20, minutes: 30, sound: true},
-  },
-  thursday: {
-    day: {hours: 7, minutes: 0, sound: true},
-    night: {hours: 20, minutes: 30, sound: true},
-  },
-  friday: {
-    day: {hours: 7, minutes: 0, sound: true},
-    night: {hours: 20, minutes: 30, sound: true},
-  },
-  saturday: {
-    day: {hours: 8, minutes: 0, sound: false},
-    night: {hours: 21, minutes: 0, sound: true},
-  },
-  sunday: {
-    day: {hours: 8, minutes: 0, sound: false},
-    night: {hours: 21, minutes: 0, sound: true},
-  },
-};
+import {defaultSchedule} from './default-settings';
 
 export default function Admin() {
   const [schedule, setSchedule] = useState(defaultSchedule);
@@ -42,12 +11,14 @@ export default function Admin() {
     let cancel = false;
     async function fetchSchedule() {
       const response = await fetch('/schedule');
-      const nextSchedule = (await response.json()) as Settings;
+      const data: unknown = await response.json();
 
       if (cancel) {
         return;
       }
 
+      // Throws if the data is invalid, resulting in the default schedule in the state
+      const nextSchedule = settingsSchema.parse(data);
       setSchedule(nextSchedule);
     }
 

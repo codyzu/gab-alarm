@@ -5,44 +5,14 @@ import {useSound} from 'use-sound';
 import wake from './assets/rooster.mp3';
 import sleep from './assets/cricket.mp3';
 import {
+  settingsSchema,
   type Day,
-  type DaySchedule,
   type Time,
   type WeekSchedule,
 } from './schedule.types';
+import {defaultSchedule} from './default-settings';
 
 type ClockMode = 'day' | 'night';
-
-const defaultSchedule: WeekSchedule = {
-  monday: {
-    day: {hours: 7, minutes: 0, sound: true},
-    night: {hours: 20, minutes: 30, sound: true},
-  },
-  tuesday: {
-    day: {hours: 7, minutes: 0, sound: true},
-    night: {hours: 20, minutes: 30, sound: true},
-  },
-  wednesday: {
-    day: {hours: 7, minutes: 0, sound: true},
-    night: {hours: 20, minutes: 30, sound: true},
-  },
-  thursday: {
-    day: {hours: 7, minutes: 0, sound: true},
-    night: {hours: 20, minutes: 30, sound: true},
-  },
-  friday: {
-    day: {hours: 7, minutes: 0, sound: true},
-    night: {hours: 20, minutes: 30, sound: true},
-  },
-  saturday: {
-    day: {hours: 8, minutes: 0, sound: false},
-    night: {hours: 21, minutes: 0, sound: true},
-  },
-  sunday: {
-    day: {hours: 8, minutes: 0, sound: false},
-    night: {hours: 21, minutes: 0, sound: true},
-  },
-};
 
 const days: Day[] = [
   'monday',
@@ -74,9 +44,9 @@ function App() {
   const todayName = days[(time.getDay() - 1 + 7) % 7];
   const yesterdayName = days[(time.getDay() - 1 + 7 - 1) % 7];
   const tomorrowName = days[time.getDay() - 1 + 1];
-  const today = schedule[todayName] as DaySchedule;
-  const yesterday = schedule[yesterdayName] as DaySchedule;
-  const tomorrow = schedule[tomorrowName] as DaySchedule;
+  const today = schedule[todayName];
+  const yesterday = schedule[yesterdayName];
+  const tomorrow = schedule[tomorrowName];
 
   const nowMinutes = toMinutes(time.getHours(), time.getMinutes());
   const todayDayMinutes = toMinutes(today.day.hours, today.day.minutes);
@@ -162,15 +132,15 @@ function App() {
     let cancel = false;
     const handle = setInterval(async () => {
       const response = await fetch('/schedule');
-      if (!response.ok) {
-        throw new Error(await response.text());
+      const data: unknown = await response.json();
+
+      if (cancel) {
+        return;
       }
 
-      const nextSchedule = (await response.json()) as WeekSchedule;
-
-      if (!cancel) {
-        setSchedule(nextSchedule);
-      }
+      // Throws if the data is invalid, resulting in the default schedule in the state
+      const nextSchedule = settingsSchema.parse(data);
+      setSchedule(nextSchedule);
     }, 5000);
 
     return () => {

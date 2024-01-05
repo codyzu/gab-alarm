@@ -23,7 +23,8 @@
     "fastify": "^4.25.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "use-sound": "^4.0.1"
+    "use-sound": "^4.0.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@iconify-json/pixelarticons": "^1.1.10",
