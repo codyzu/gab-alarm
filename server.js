@@ -58,7 +58,7 @@ fastify.post('/schedule', async (request, reply) => {
 
 fastify.post('/morning', async (request, reply) => {
   const result = await Promise.allSettled([
-    playSound('./client/src/assets/rooster.mp3'),
+    execa('./bin/wake-sound.sh'),
     setBrightness(255),
   ]);
 
@@ -73,7 +73,7 @@ fastify.post('/morning', async (request, reply) => {
 
 fastify.post('/night', async (request, reply) => {
   const result = await Promise.allSettled([
-    playSound('./client/src/assets/cricket.mp3'),
+    execa('./bin/sleep-sound.sh'),
     setBrightness(0),
   ]);
 
@@ -85,10 +85,6 @@ fastify.post('/night', async (request, reply) => {
 
   return result;
 });
-
-function playSound(path) {
-  return execa('mplayer', ['-quiet', path]);
-}
 
 function setBrightness(level) {
   return execa('sudo', ['-n', './bin/set-brightness.sh', level]);
