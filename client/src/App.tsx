@@ -4,60 +4,27 @@ import clsx from 'clsx';
 import {useSound} from 'use-sound';
 import wake from './assets/rooster.mp3';
 import sleep from './assets/cricket.mp3';
-import {
-  settingsSchema,
-  type Day,
-  type Time,
-  type WeekSchedule,
-} from './schedule.types';
-import {defaultSchedule} from './default-settings';
-
-type ClockMode = 'day' | 'night';
-
-const days: Day[] = [
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-  'sunday',
-];
-
-function toMinutes(hours: number, minutes: number): number {
-  const total = hours * 60 + minutes;
-  return total;
-}
-
-const minutesPerDay = 60 * 24;
+import {type ClockMode} from './schedule.types';
+import {useFunctionalSchedule, usePolledSettings} from './schedule';
 
 function App() {
+  const [playWake] = (useSound as (url: any) => [() => void])(wake);
+  const [playSleep] = (useSound as (url: any) => [() => void])(sleep);
+
   const [time, setTime] = useState(new Date());
-  const [schedule, setSchedule] = useState<WeekSchedule>(defaultSchedule);
+
+  const settings = usePolledSettings();
+  const {
+    upperLimit,
+    percent,
+    clockMode: calculatedMode,
+  } = useFunctionalSchedule(time, settings);
+
   const [modeOverride, setModeOverride] = useState<
     {mode: ClockMode; timeoutTimestamp: number} | undefined
   >(undefined);
 
-  const [playWake] = (useSound as (url: any) => [() => void])(wake);
-  const [playSleep] = (useSound as (url: any) => [() => void])(sleep);
-
-  const todayName = days[(time.getDay() - 1 + 7) % 7];
-  const yesterdayName = days[(time.getDay() - 1 + 7 - 1) % 7];
-  const tomorrowName = days[time.getDay() - 1 + 1];
-  const today = schedule[todayName];
-  const yesterday = schedule[yesterdayName];
-  const tomorrow = schedule[tomorrowName];
-
-  const nowMinutes = toMinutes(time.getHours(), time.getMinutes());
-  const todayDayMinutes = toMinutes(today.day.hours, today.day.minutes);
-  const todayNightMinutes = toMinutes(today.night.hours, today.night.minutes);
-
-  const actualMode: ClockMode =
-    nowMinutes < todayDayMinutes || nowMinutes >= todayNightMinutes
-      ? 'night'
-      : 'day';
-
-  const clockMode: ClockMode = modeOverride?.mode ?? actualMode;
+  const clockMode: ClockMode = modeOverride?.mode ?? calculatedMode;
 
   const [previousMode, setPreviousMode] = useState(clockMode);
   useEffect(() => {
@@ -73,46 +40,6 @@ function App() {
     }
   }, [clockMode, previousMode, playSleep, playWake]);
 
-  let lowerLimit: Time;
-  let lowerLimitMinutes: number;
-  let upperLimit: Time;
-  let upperLimitMinutes: number;
-
-  if (nowMinutes < todayDayMinutes) {
-    lowerLimit = yesterday.night;
-    lowerLimitMinutes = toMinutes(
-      yesterday.night.hours,
-      yesterday.night.minutes,
-    );
-  } else if (nowMinutes < todayNightMinutes) {
-    lowerLimit = today.day;
-    lowerLimitMinutes =
-      toMinutes(today.day.hours, today.day.minutes) + minutesPerDay;
-  } else {
-    lowerLimit = today.night;
-    lowerLimitMinutes =
-      toMinutes(today.night.hours, today.night.minutes) + minutesPerDay;
-  }
-
-  if (nowMinutes > todayNightMinutes) {
-    upperLimit = tomorrow.day;
-    upperLimitMinutes =
-      toMinutes(tomorrow.night.hours, tomorrow.night.minutes) +
-      minutesPerDay * 2;
-  } else if (nowMinutes > todayDayMinutes) {
-    upperLimit = today.night;
-    upperLimitMinutes =
-      toMinutes(today.night.hours, today.night.minutes) + minutesPerDay;
-  } else {
-    upperLimit = today.day;
-    upperLimitMinutes =
-      toMinutes(today.day.hours, today.day.minutes) + minutesPerDay;
-  }
-
-  const percent =
-    ((nowMinutes + minutesPerDay - lowerLimitMinutes) * 100) /
-    (upperLimitMinutes - lowerLimitMinutes);
-
   useEffect(() => {
     const handle = setInterval(() => {
       const nextTime = new Date();
@@ -127,27 +54,6 @@ function App() {
       clearInterval(handle);
     };
   }, [modeOverride]);
-
-  useEffect(() => {
-    let cancel = false;
-    const handle = setInterval(async () => {
-      const response = await fetch('/schedule');
-      const data: unknown = await response.json();
-
-      if (cancel) {
-        return;
-      }
-
-      // Throws if the data is invalid, resulting in the default schedule in the state
-      const nextSchedule = settingsSchema.parse(data);
-      setSchedule(nextSchedule);
-    }, 5000);
-
-    return () => {
-      cancel = true;
-      clearInterval(handle);
-    };
-  }, []);
 
   // Const keyHandlers = useMemo(
   //   () =>
