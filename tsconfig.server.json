@@ -101,5 +101,5 @@
   },
   "include": [
     "server.ts"
-  ]
+  ],
 }

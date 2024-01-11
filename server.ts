@@ -16,7 +16,7 @@ const fastify = fastifyFactory({
 });
 
 await fastify.register(fastifyStatic, {
-  root: new URL('../public', import.meta.url),
+  root: new URL('public', import.meta.url),
 });
 
 // Await fastify.register(fastifyStatic, {
@@ -26,7 +26,7 @@ await fastify.register(fastifyStatic, {
 // });
 
 await fastify.register(FastifyVite, {
-  root: new URL('..', import.meta.url).pathname,
+  root: new URL(import.meta.url).pathname,
   dev: process.argv.includes('--dev'),
   spa: true,
 });

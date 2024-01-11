@@ -4,11 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon -x \"pnpm run build:server && pnpm run start --dev\" -w server.ts",
-    "start": "node build/server.js",
-    "build:client": "tsc && vite build",
-    "build:server": "rm -Rf ./build && tsc -p tsconfig.server.json --outDir build",
-    "build": "pnpm run build:server && pnpm run build:client",
+    "dev": "nodemon -x \"pnpm run start --dev\" -w server.ts",
+    "start": "TSIMP_PROJECT=tsconfig.server.json node --import=tsimp/import ./server.ts",
+    "build": "tsc && vite build",
     "lint": "xo",
     "preview": "vite preview"
   },
@@ -49,6 +47,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "nodemon": "^3.0.2",
+    "tsimp": "^2.0.10",
     "typescript": "^5.2.2",
     "unocss": "^0.58.2",
     "vite": "^5.0.8",
