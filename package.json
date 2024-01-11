@@ -4,9 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon -x \"node server.js --dev\" -w server.js",
-    "start": "node server.js",
-    "build": "tsc && vite build",
+    "dev": "nodemon -x \"pnpm run build:server && pnpm run start --dev\" -w server.ts",
+    "start": "node build/server.js",
+    "build:client": "tsc && vite build",
+    "build:server": "rm -Rf ./build && tsc -p tsconfig.server.json --outDir build",
+    "build": "pnpm run build:server && pnpm run build:client",
     "lint": "xo",
     "preview": "vite preview"
   },
@@ -28,6 +30,8 @@
   },
   "devDependencies": {
     "@iconify-json/pixelarticons": "^1.1.10",
+    "@tsconfig/node20": "^20.1.2",
+    "@types/node": "^20.10.8",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",

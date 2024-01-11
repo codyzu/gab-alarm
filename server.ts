@@ -1,10 +1,10 @@
-// Import path from 'node:path';
 import fs from 'node:fs/promises';
+import process from 'node:process';
 import fastifyFactory from 'fastify';
-// Import fastifyStatic from '@fastify/static';
 import FastifyVite from '@fastify/vite';
 import fastifyStatic from '@fastify/static';
 import {execa} from 'execa';
+import {type Settings} from './client/src/schedule.types.js';
 
 const fastify = fastifyFactory({
   // Logger: true,
@@ -16,10 +16,8 @@ const fastify = fastifyFactory({
 });
 
 await fastify.register(fastifyStatic, {
-  root: new URL('public', import.meta.url),
+  root: new URL('../public', import.meta.url),
 });
-
-console.log(new URL('../dist', import.meta.url).path);
 
 // Await fastify.register(fastifyStatic, {
 //   root: new URL('../dist', import.meta.url),
@@ -28,22 +26,22 @@ console.log(new URL('../dist', import.meta.url).path);
 // });
 
 await fastify.register(FastifyVite, {
-  root: import.meta.url,
+  root: new URL('..', import.meta.url).pathname,
   dev: process.argv.includes('--dev'),
   spa: true,
 });
 
 fastify.get('/', (request, reply) => {
-  return reply.html();
+  reply.html();
 });
 
 fastify.get('/admin', (request, reply) => {
-  return reply.html();
+  reply.html();
 });
 
 fastify.get('/schedule', async (request, reply) => {
   const scheduleRaw = await fs.readFile('./schedule.json', 'utf8');
-  const schedule = JSON.parse(scheduleRaw);
+  const schedule = JSON.parse(scheduleRaw) as Settings;
   return schedule;
 });
 fastify.post('/schedule', async (request, reply) => {
@@ -53,7 +51,7 @@ fastify.post('/schedule', async (request, reply) => {
     JSON.stringify(request.body, null, 2),
     'utf8',
   );
-  reply.code(201);
+  void reply.code(201);
 });
 
 fastify.post('/morning', async (request, reply) => {
@@ -63,9 +61,9 @@ fastify.post('/morning', async (request, reply) => {
   ]);
 
   if (result.some((r) => r.status === 'rejected')) {
-    reply.code(500);
+    void reply.code(500);
   } else {
-    reply.code(200);
+    void reply.code(200);
   }
 
   return result;
@@ -78,16 +76,16 @@ fastify.post('/night', async (request, reply) => {
   ]);
 
   if (result.some((r) => r.status === 'rejected')) {
-    reply.code(500);
+    void reply.code(500);
   } else {
-    reply.code(200);
+    void reply.code(200);
   }
 
   return result;
 });
 
-function setBrightness(level) {
-  return execa('sudo', ['-n', './bin/set-brightness.sh', level]);
+async function setBrightness(level: number) {
+  return execa('sudo', ['-n', './bin/set-brightness.sh', level.toString()]);
 }
 
 await fastify.vite.ready();
@@ -99,6 +97,7 @@ await fastify.vite.ready();
 fastify.listen({port: 3000, host: '0.0.0.0'}, function (error, address) {
   if (error) {
     fastify.log.error(error);
+    // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1);
   }
 
