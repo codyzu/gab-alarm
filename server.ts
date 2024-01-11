@@ -4,7 +4,7 @@ import fastifyFactory from 'fastify';
 import FastifyVite from '@fastify/vite';
 import fastifyStatic from '@fastify/static';
 import {execa} from 'execa';
-import {type Settings} from './schedule.types.js';
+import {type Settings} from './client/src/schedule.types.js';
 
 const fastify = fastifyFactory({
   // Logger: true,

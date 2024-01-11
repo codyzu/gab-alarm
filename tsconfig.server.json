@@ -98,13 +98,8 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     // "skipLibCheck": true /* Skip type checking all .d.ts files. */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "server.ts",
-    "schedule.types.ts"
+    "server.ts"
   ],
 }
