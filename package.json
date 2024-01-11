@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon -x \"pnpm run start --dev\" -w server.ts",
-    "start": "TSIMP_PROJECT=tsconfig.server.json node --import=tsimp/import ./server.ts",
+    "start": "node --import=tsimp/import ./server.ts",
     "build": "tsc && vite build",
     "lint": "xo",
     "preview": "vite preview"
