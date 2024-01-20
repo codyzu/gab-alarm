@@ -18,7 +18,7 @@ function App() {
     upperLimit,
     percent,
     clockMode: calculatedMode,
-    sound,
+    sound: calculatedSound,
   } = useFunctionalSchedule(time, settings);
 
   const [modeOverride, setModeOverride] = useState<
@@ -26,6 +26,7 @@ function App() {
   >(undefined);
 
   const clockMode: ClockMode = modeOverride?.mode ?? calculatedMode;
+  const sound: boolean = modeOverride !== undefined || calculatedSound;
 
   const [previousMode, setPreviousMode] = useState(clockMode);
   useEffect(() => {
