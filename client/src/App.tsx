@@ -18,6 +18,7 @@ function App() {
     upperLimit,
     percent,
     clockMode: calculatedMode,
+    sound,
   } = useFunctionalSchedule(time, settings);
 
   const [modeOverride, setModeOverride] = useState<
@@ -32,13 +33,21 @@ function App() {
       setPreviousMode(clockMode);
       if (clockMode === 'day') {
         void fetch('/morning', {method: 'POST'});
+
+        if (sound) {
+          void fetch('/morning-sound', {method: 'POST'});
+        }
         // PlayWake();
       } else {
         void fetch('/night', {method: 'POST'});
+
+        if (sound) {
+          void fetch('/night-sound', {method: 'POST'});
+        }
         // PlaySleep();
       }
     }
-  }, [clockMode, previousMode, playSleep, playWake]);
+  }, [clockMode, previousMode, playSleep, playWake, sound]);
 
   useEffect(() => {
     const handle = setInterval(() => {

@@ -55,33 +55,19 @@ fastify.post('/schedule', async (request, reply) => {
 });
 
 fastify.post('/morning', async (request, reply) => {
-  const result = await Promise.allSettled([
-    execa('./bin/wake-sound.sh'),
-    setBrightness(255),
-  ]);
+  return setBrightness(255);
+});
 
-  if (result.some((r) => r.status === 'rejected')) {
-    void reply.code(500);
-  } else {
-    void reply.code(200);
-  }
+fastify.post('/morning-sound', async (request, reply) => {
+  return execa('./bin/wake-sound.sh');
+});
 
-  return result;
+fastify.post('/night-sound', async (request, reply) => {
+  return execa('./bin/sleep-sound.sh');
 });
 
 fastify.post('/night', async (request, reply) => {
-  const result = await Promise.allSettled([
-    execa('./bin/sleep-sound.sh'),
-    setBrightness(0),
-  ]);
-
-  if (result.some((r) => r.status === 'rejected')) {
-    void reply.code(500);
-  } else {
-    void reply.code(200);
-  }
-
-  return result;
+  return setBrightness(0);
 });
 
 async function setBrightness(level: number) {

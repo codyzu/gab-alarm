@@ -231,8 +231,6 @@ function applyOverride(
     };
   }
 
-  console.log({override});
-
   return {override, schedule: sched};
 }
 
@@ -255,27 +253,29 @@ export function useFunctionalSchedule(now: Date, settings: Settings) {
   let lowerLimitMinutes: number;
   let upperLimit: Time;
   let upperLimitMinutes: number;
+  let sound: boolean;
 
   if (nowMinutes < todayDayMinutes) {
+    // Before today morning
     lowerLimit = yesterday.night;
     lowerLimitMinutes = timeToMinutes(yesterday.night);
-  } else if (nowMinutes < todayNightMinutes) {
-    lowerLimit = today.day;
-    lowerLimitMinutes = timeToMinutes(today.day) + minutesPerDay;
-  } else {
-    lowerLimit = today.night;
-    lowerLimitMinutes = timeToMinutes(today.night) + minutesPerDay;
-  }
-
-  if (nowMinutes > todayNightMinutes) {
-    upperLimit = tomorrow.day;
-    upperLimitMinutes = timeToMinutes(tomorrow.night) + minutesPerDay * 2;
-  } else if (nowMinutes > todayDayMinutes) {
-    upperLimit = today.night;
-    upperLimitMinutes = timeToMinutes(today.night) + minutesPerDay;
-  } else {
     upperLimit = today.day;
     upperLimitMinutes = timeToMinutes(today.day) + minutesPerDay;
+    sound = yesterday.night.sound;
+  } else if (nowMinutes < todayNightMinutes) {
+    // Before today night
+    lowerLimit = today.day;
+    lowerLimitMinutes = timeToMinutes(today.day) + minutesPerDay;
+    upperLimit = today.night;
+    upperLimitMinutes = timeToMinutes(today.night) + minutesPerDay;
+    sound = today.day.sound;
+  } else {
+    // After today night
+    lowerLimit = today.night;
+    lowerLimitMinutes = timeToMinutes(today.night) + minutesPerDay;
+    upperLimit = tomorrow.day;
+    upperLimitMinutes = timeToMinutes(tomorrow.day) + minutesPerDay * 2;
+    sound = today.night.sound;
   }
 
   const clockMode: ClockMode =
@@ -293,6 +293,7 @@ export function useFunctionalSchedule(now: Date, settings: Settings) {
     // Probably won't display lower limit, so this can be removed and deleted from the calculations above
     lowerLimit,
     percent,
+    sound,
   };
 }
 
