@@ -31,14 +31,17 @@ await fastify.register(FastifyVite, {
   spa: true,
 });
 
+// @ts-expect-error params aren't used, but left here for reference
 fastify.get('/', (request, reply) => {
   reply.html();
 });
 
+// @ts-expect-error params aren't used, but left here for reference
 fastify.get('/admin', (request, reply) => {
   reply.html();
 });
 
+// @ts-expect-error params aren't used, but left here for reference
 fastify.get('/schedule', async (request, reply) => {
   const scheduleRaw = await fs.readFile('./schedule.json', 'utf8');
   const schedule = JSON.parse(scheduleRaw) as Settings;
@@ -54,18 +57,22 @@ fastify.post('/schedule', async (request, reply) => {
   void reply.code(201);
 });
 
+// @ts-expect-error params aren't used, but left here for reference
 fastify.post('/morning', async (request, reply) => {
   return setBrightness(255);
 });
 
+// @ts-expect-error params aren't used, but left here for reference
 fastify.post('/morning-sound', async (request, reply) => {
   return execa('./bin/wake-sound.sh');
 });
 
+// @ts-expect-error params aren't used, but left here for reference
 fastify.post('/night-sound', async (request, reply) => {
   return execa('./bin/sleep-sound.sh');
 });
 
+// @ts-expect-error params aren't used, but left here for reference
 fastify.post('/night', async (request, reply) => {
   return setBrightness(0);
 });
@@ -76,10 +83,7 @@ async function setBrightness(level: number) {
 
 await fastify.vite.ready();
 
-// Fastify.get('/', function (request, reply) {
-//   reply.send({hello: 'world'});
-// });
-
+// @ts-expect-error params aren't used, but left here for reference
 fastify.listen({port: 3000, host: '0.0.0.0'}, function (error, address) {
   if (error) {
     fastify.log.error(error);
