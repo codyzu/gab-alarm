@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises';
 import process from 'node:process';
 import fastifyFactory from 'fastify';
-import FastifyVite from '@fastify/vite';
 import fastifyStatic from '@fastify/static';
 import {execa} from 'execa';
 import {type Settings} from './client/src/schedule.types.js';
@@ -16,29 +15,17 @@ const fastify = fastifyFactory({
 });
 
 await fastify.register(fastifyStatic, {
-  root: new URL('public', import.meta.url),
-});
-
-// Await fastify.register(fastifyStatic, {
-//   root: new URL('../dist', import.meta.url),
-//   // Prefix: '/public/', // Optional: default '/'
-//   // constraints: {host: 'example.com'}, // Optional: default {}
-// });
-
-await fastify.register(FastifyVite, {
-  root: new URL(import.meta.url).pathname,
-  dev: process.argv.includes('--dev'),
-  spa: true,
+  root: new URL('client/dist', import.meta.url),
 });
 
 // @ts-expect-error params aren't used, but left here for reference
 fastify.get('/', (request, reply) => {
-  reply.html();
+  return reply.sendFile('index.html');
 });
 
 // @ts-expect-error params aren't used, but left here for reference
 fastify.get('/admin', (request, reply) => {
-  reply.html();
+  return reply.sendFile('index.html');
 });
 
 // @ts-expect-error params aren't used, but left here for reference
@@ -80,8 +67,6 @@ fastify.post('/night', async (request, reply) => {
 async function setBrightness(level: number) {
   return execa('sudo', ['-n', './bin/set-brightness.sh', level.toString()]);
 }
-
-await fastify.vite.ready();
 
 // @ts-expect-error params aren't used, but left here for reference
 fastify.listen({port: 3000, host: '0.0.0.0'}, function (error, address) {

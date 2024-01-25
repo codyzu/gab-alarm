@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon -x \"pnpm run start --dev\" -w server.ts",
+    "dev": "concurrently --names SERVER,CLIENT --prefix-colors 'yellow,blue' --kill-others 'pnpm run dev:server' 'pnpm run dev:client'",
+    "dev:server": "nodemon -x \"pnpm run start --dev\" -w server.ts",
+    "dev:client": "vite",
     "start": "TSIMP_PROJECT=tsconfig.server.json node --import=tsimp/import ./server.ts",
     "build": "tsc && vite build",
     "lint": "xo",
@@ -13,7 +15,6 @@
   "dependencies": {
     "@fastify/one-line-logger": "^1.2.0",
     "@fastify/static": "^6.12.0",
-    "@fastify/vite": "^5.0.6",
     "@iconify-json/fluent-emoji": "^1.1.18",
     "@tanstack/react-router": "^1.0.6",
     "@tanstack/router-devtools": "^1.0.6",
@@ -41,6 +42,7 @@
     "@unocss/transformer-directives": "^0.58.2",
     "@unocss/transformer-variant-group": "^0.58.2",
     "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
     "eslint": "^8.55.0",
     "eslint-config-xo-react": "^0.27.0",
     "eslint-plugin-react": "^7.33.2",
