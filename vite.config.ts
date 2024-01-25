@@ -21,4 +21,7 @@ export default defineConfig({
       /* eslint-enable @typescript-eslint/naming-convention */
     },
   },
+  build: {
+    outDir: '../dist',
+  },
 });

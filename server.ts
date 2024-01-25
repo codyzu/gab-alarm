@@ -15,7 +15,7 @@ const fastify = fastifyFactory({
 });
 
 await fastify.register(fastifyStatic, {
-  root: new URL('client/dist', import.meta.url),
+  root: new URL('dist', import.meta.url),
 });
 
 // @ts-expect-error params aren't used, but left here for reference
