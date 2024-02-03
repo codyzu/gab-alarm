@@ -1,4 +1,4 @@
-import {type Settings} from './schedule.types';
+import {type Settings} from '../../shared/schedule.types';
 
 export const defaultSettings: Settings = {
   override: {

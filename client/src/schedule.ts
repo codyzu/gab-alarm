@@ -11,7 +11,7 @@ import {
   type Time,
   type DaySchedule,
   type WeekSchedule,
-} from './schedule.types';
+} from '../../shared/schedule.types.ts';
 import {defaultSettings} from './default-settings';
 
 async function getSettings(): Promise<Settings> {

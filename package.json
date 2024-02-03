@@ -7,8 +7,8 @@
     "dev": "concurrently --names SERVER,CLIENT --prefix-colors 'yellow,blue' --kill-others 'pnpm run dev:server' 'pnpm run dev:client'",
     "dev:server": "nodemon -x \"pnpm run start --dev\" -w server.ts",
     "dev:client": "vite",
-    "start": "TSIMP_PROJECT=tsconfig.server.json node --import=tsimp/import ./server.ts",
-    "build": "tsc && vite build",
+    "start": "TSIMP_PROJECT=server/tsconfig.json node --import=tsimp/import server/server.ts",
+    "build": "tsc -p ./client/tsconfig.json && vite build --emptyOutDir",
     "lint": "xo",
     "preview": "vite preview"
   },

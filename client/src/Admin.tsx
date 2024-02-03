@@ -1,6 +1,6 @@
 import clsx from 'clsx';
+import {days} from '../../shared/schedule.types.ts';
 import DayControl from './DayControl';
-import {days} from './schedule.types';
 import TransitionControl from './TransitionControl';
 import {useRawSchedule} from './schedule';
 

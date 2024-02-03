@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import {useSound} from 'use-sound';
 import wake from './assets/rooster.mp3';
 import sleep from './assets/cricket.mp3';
-import {type ClockMode} from './schedule.types';
+import {type ClockMode} from '../../shared/schedule.types';
 import {useFunctionalSchedule, usePolledSettings} from './schedule';
 
 function App() {

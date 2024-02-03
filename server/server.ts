@@ -3,19 +3,20 @@ import process from 'node:process';
 import fastifyFactory from 'fastify';
 import fastifyStatic from '@fastify/static';
 import {execa} from 'execa';
-import {type Settings} from './client/src/schedule.types.js';
+import {settingsSchema} from '../shared/schedule.types.js';
 
 const fastify = fastifyFactory({
   // Logger: true,
   logger: {
     transport: {
       target: '@fastify/one-line-logger',
+      options: {colorize: true},
     },
   },
 });
 
 await fastify.register(fastifyStatic, {
-  root: new URL('dist', import.meta.url),
+  root: new URL('../dist', import.meta.url),
 });
 
 // @ts-expect-error params aren't used, but left here for reference
@@ -31,11 +32,17 @@ fastify.get('/admin', (request, reply) => {
 // @ts-expect-error params aren't used, but left here for reference
 fastify.get('/schedule', async (request, reply) => {
   const scheduleRaw = await fs.readFile('./schedule.json', 'utf8');
-  const schedule = JSON.parse(scheduleRaw) as Settings;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const scheduleObject = JSON.parse(scheduleRaw);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
+  const schedule = settingsSchema.parse(scheduleObject);
   return schedule;
 });
+
 fastify.post('/schedule', async (request, reply) => {
   console.log('body', request.body);
+
+  // Const validatedSchedule = settingsSchema.parse(request.body);
   await fs.writeFile(
     './schedule.json',
     JSON.stringify(request.body, null, 2),
