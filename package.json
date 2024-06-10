@@ -7,7 +7,7 @@
     "dev": "concurrently --names SERVER,CLIENT --prefix-colors 'yellow,blue' --kill-others 'pnpm run dev:server' 'pnpm run dev:client'",
     "dev:server": "nodemon -x \"pnpm run start --dev\" -w server.ts",
     "dev:client": "vite",
-    "start": "TSIMP_PROJECT=server/tsconfig.json node --import=tsimp/import server/server.ts",
+    "start": "TSX_TSCONFIG_PATH=server/tsconfig.json node --import=tsx server/server.ts",
     "build": "tsc -p ./client/tsconfig.json && vite build --emptyOutDir",
     "lint": "xo",
     "preview": "vite preview"
@@ -49,7 +49,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "nodemon": "^3.0.2",
-    "tsimp": "^2.0.10",
+    "tsx": "^4.15.1",
     "typescript": "^5.2.2",
     "unocss": "^0.58.2",
     "vite": "^5.0.8",
