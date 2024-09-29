@@ -1,0 +1,42 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tanstack/react-router": "^1.0.6",
+    "@tanstack/router-devtools": "^1.0.6",
+    "@unocss/reset": "^0.58.3",
+    "clsx": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "use-sound": "^4.0.1",
+    "shared": "workspace:../shared"
+  },
+  "devDependencies": {
+    "@iconify-json/fluent-emoji": "^1.1.18",
+    "@iconify-json/pixelarticons": "^1.1.10",
+    "@types/node": "^20.10.8",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@unocss/preset-icons": "^0.58.2",
+    "@unocss/preset-typography": "^0.58.2",
+    "@unocss/preset-uno": "^0.58.2",
+    "@unocss/preset-web-fonts": "^0.58.2",
+    "@unocss/transformer-directives": "^0.58.2",
+    "@unocss/transformer-variant-group": "^0.58.2",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.2.2",
+    "unocss": "^0.58.2",
+    "vite": "^5.0.8"
+  }
+}

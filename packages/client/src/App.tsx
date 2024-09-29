@@ -2,9 +2,9 @@ import {useEffect, useState} from 'react';
 import clsx from 'clsx';
 // @ts-expect-error bad package exports
 import {useSound} from 'use-sound';
+import {type ClockMode} from 'shared';
 import wake from './assets/rooster.mp3';
 import sleep from './assets/cricket.mp3';
-import {type ClockMode} from '../../shared/schedule.types';
 import {useFunctionalSchedule, usePolledSettings} from './schedule';
 
 function App() {

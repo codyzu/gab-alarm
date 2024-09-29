@@ -3,7 +3,7 @@ import process from 'node:process';
 import fastifyFactory from 'fastify';
 import fastifyStatic from '@fastify/static';
 import {execa} from 'execa';
-import {settingsSchema} from '../shared/schedule.types.js';
+import {settingsSchema} from 'shared';
 
 const fastify = fastifyFactory({
   // Logger: true,
@@ -16,7 +16,7 @@ const fastify = fastifyFactory({
 });
 
 await fastify.register(fastifyStatic, {
-  root: new URL('../dist', import.meta.url),
+  root: new URL('node_modules/client/dist', import.meta.url),
 });
 
 // @ts-expect-error params aren't used, but left here for reference
@@ -34,7 +34,7 @@ fastify.get('/schedule', async (request, reply) => {
   const scheduleRaw = await fs.readFile('./schedule.json', 'utf8');
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const scheduleObject = JSON.parse(scheduleRaw);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
+
   const schedule = settingsSchema.parse(scheduleObject);
   return schedule;
 });

@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "TSX_TSCONFIG_PATH=tsconfig.json node --import=tsx server.ts",
+    "dev": "nodemon -x \"pnpm run start --dev\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/one-line-logger": "^1.2.0",
+    "@fastify/static": "^6.12.0",
+    "client": "workspace:../client",
+    "execa": "^8.0.1",
+    "fastify": "^4.25.2",
+    "shared": "workspace:../shared"
+  },
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^3.0.3",
+    "tsx": "^4.15.1"
+  }
+}

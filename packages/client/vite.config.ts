@@ -5,12 +5,12 @@ import react from '@vitejs/plugin-react';
 import unoCSS from 'unocss/vite';
 
 const path = fileURLToPath(import.meta.url);
-const root = resolve(dirname(path), 'client');
+// Const root = resolve(dirname(path), 'client');
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [unoCSS(), react()],
-  root,
+  // Root,
   publicDir: resolve(dirname(path), 'public'),
   server: {
     proxy: {
@@ -21,7 +21,7 @@ export default defineConfig({
       /* eslint-enable @typescript-eslint/naming-convention */
     },
   },
-  build: {
-    outDir: '../dist',
-  },
+  // Build: {
+  //   outDir: '../dist',
+  // },
 });

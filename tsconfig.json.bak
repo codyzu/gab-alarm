@@ -23,12 +23,14 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "./src",
-    "../shared/schedule.types.ts"
+    "client/src"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.server.json"
+    }
   ]
-  // "references": [
-  //   {
-  //     "path": "../shared/tsconfig.json"
-  //   },
-  // ]
 }

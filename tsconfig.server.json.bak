@@ -101,17 +101,11 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
-    ".",
-    // "../shared/schedule.types.ts"
+    "server.ts",
+    // Gives an error when compiling the client
+    // "client/src/schedule.types.ts"
   ],
-  "references": [
-    {
-      "path": "../shared/tsconfig.json"
-    },
-  ]
 }

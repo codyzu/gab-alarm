@@ -1,4 +1,4 @@
-import {type Time} from '../../shared/schedule.types';
+import {type Time} from 'shared';
 
 function timeStringToTime(time: string) {
   return {
