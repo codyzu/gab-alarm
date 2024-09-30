@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node --experimental-strip-types server.ts",
-    "dev": "nodemon -x \"pnpm run start --dev\""
+    "build": "tsc",
+    "dev": "nodemon -x \"pnpm run start --dev\" -i \"schedule.json\""
   },
   "keywords": [],
   "author": "",
