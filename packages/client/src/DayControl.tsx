@@ -1,5 +1,5 @@
-import TransitionControl from './TransitionControl';
 import {type Transition, type Time} from '../../shared/schedule.types';
+import TransitionControl from './TransitionControl';
 
 export default function DayControl({
   dayName,

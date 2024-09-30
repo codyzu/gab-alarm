@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+lib
 
 # Editor directories and files
 .vscode/*
@@ -25,3 +26,4 @@ dist-ssr
 schedule.json*
 
 .tsimp
+*.tsbuildinfo
