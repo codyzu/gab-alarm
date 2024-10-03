@@ -17,11 +17,19 @@ const fastify = fastifyFactory({
 
 await fastify.register(fastifyStatic, {
   root: new URL('node_modules/client/dist', import.meta.url),
+  maxAge: '1d',
+  immutable: true,
 });
 
 // @ts-expect-error params aren't used, but left here for reference
 fastify.get('/', (request, reply) => {
-  return reply.sendFile('index.html');
+  return reply.sendFile('index.html', {cacheControl: false});
+});
+
+// @ts-expect-error params aren't used, but left here for reference
+fastify.get('/clock.svg', (request, reply) => {
+  // Favicon does not use cache-bursting, let's disable the default cache header
+  return reply.sendFile('clock.svg', {cacheControl: false});
 });
 
 // @ts-expect-error params aren't used, but left here for reference
