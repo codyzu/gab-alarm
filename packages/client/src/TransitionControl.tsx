@@ -2,22 +2,22 @@ import {type Time} from 'shared';
 
 function timeStringToTime(time: string) {
   return {
-    hours: Number.parseInt(time.split(':')[0]!, 10),
-    minutes: Number.parseInt(time.split(':')[1]!, 10),
+    hours: Number.parseInt(time.split(':')[0], 10),
+    minutes: Number.parseInt(time.split(':')[1], 10),
   };
 }
 
 export default function TransitionControl({
   label,
   time,
-  sound,
+  isSoundEnabled,
   setTime,
   setSound,
 }: {
   readonly label: string;
   readonly time: Time;
   readonly setTime: (time: Time) => void;
-  readonly sound: boolean;
+  readonly isSoundEnabled: boolean;
   readonly setSound: (sound: boolean) => void;
 }) {
   return (
@@ -40,7 +40,7 @@ export default function TransitionControl({
         <input
           className="focus:outline-green justify-self-start h-full aspect-square"
           type="checkbox"
-          checked={sound}
+          checked={isSoundEnabled}
           onChange={(event) => {
             setSound(event.target.checked);
           }}

@@ -9,22 +9,21 @@
     "build": "pnpm run --filter ./packages/shared build && pnpm run --filter ./packages/client build && pnpm run --filter ./packages/server build",
     "lint": "xo"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@tsconfig/node20": "^20.1.2",
-    "@types/node": "^20.10.8",
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
-    "@typescript-eslint/eslint-plugin": "^6.14.0",
-    "@typescript-eslint/parser": "^6.14.0",
-    "concurrently": "^8.2.2",
-    "eslint": "^8.55.0",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/node": "^22.7.4",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.8.0",
+    "@typescript-eslint/parser": "^8.8.0",
+    "concurrently": "^9.0.1",
+    "eslint": "^9.11.1",
     "eslint-config-xo-react": "^0.27.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
-    "nodemon": "^3.0.2",
-    "typescript": "^5.2.2",
-    "xo": "^0.56.0"
+    "eslint-plugin-react": "^7.37.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.2",
+    "xo": "^0.59.3"
   }
 }

@@ -1,11 +1,11 @@
 // Uno.config.ts
 import {defineConfig} from 'unocss';
-import presetUno from '@unocss/preset-uno';
-import presetIcons from '@unocss/preset-icons';
-import presetTypography from '@unocss/preset-typography';
+import {presetUno} from '@unocss/preset-uno';
+import {presetIcons} from '@unocss/preset-icons';
+import {presetTypography} from '@unocss/preset-typography';
 import transformerVariantGroup from '@unocss/transformer-variant-group';
 import transformerDirectives from '@unocss/transformer-directives';
-import presetWebFonts from '@unocss/preset-web-fonts';
+import {presetWebFonts} from '@unocss/preset-web-fonts';
 
 export default defineConfig({
   presets: [

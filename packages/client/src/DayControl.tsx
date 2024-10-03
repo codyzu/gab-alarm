@@ -26,14 +26,14 @@ export default function DayControl({
           label="Wakeup"
           time={day}
           setTime={setDayTime}
-          sound={day.sound}
+          isSoundEnabled={day.sound}
           setSound={setDaySound}
         />
         <TransitionControl
           label="Sleep"
           time={night}
           setTime={setNightTime}
-          sound={night.sound}
+          isSoundEnabled={night.sound}
           setSound={setNightSound}
         />
       </div>

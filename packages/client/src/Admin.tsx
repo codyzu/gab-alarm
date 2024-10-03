@@ -36,7 +36,7 @@ export default function Admin() {
           <TransitionControl
             label="Wakeup"
             time={settings.override.transition}
-            sound={settings.override.transition.sound}
+            isSoundEnabled={settings.override.transition.sound}
             setTime={(time) => {
               setOverrideTime(time);
             }}
