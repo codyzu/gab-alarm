@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import clsx from 'clsx';
-// @ts-expect-error bad package exports
 import {useSound} from 'use-sound';
 import {type ClockMode} from 'shared';
 import wake from './assets/rooster.mp3';
@@ -8,8 +7,8 @@ import sleep from './assets/cricket.mp3';
 import {useFunctionalSchedule, usePolledSettings} from './schedule';
 
 function App() {
-  const [playWake] = (useSound as (url: any) => [() => void])(wake);
-  const [playSleep] = (useSound as (url: any) => [() => void])(sleep);
+  const [playWake] = useSound(wake);
+  const [playSleep] = useSound(sleep);
 
   const [time, setTime] = useState(new Date());
 
