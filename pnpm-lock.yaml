@@ -148,6 +148,9 @@ importers:
         specifier: workspace:../shared
         version: link:../shared
     devDependencies:
+      '@tsconfig/node22':
+        specifier: ^22.0.0
+        version: 22.0.0
       nodemon:
         specifier: ^3.1.7
         version: 3.1.7
@@ -823,6 +826,9 @@ packages:
   '@tsconfig/node20@20.1.4':
     resolution: {integrity: sha512-sqgsT69YFeLWf5NtJ4Xq/xAF8p4ZQHlmGW74Nu2tD4+g5fAsposc4ZfaaPixVu4y01BEiDCWLRDCvDM5JOsRxg==}
 
+  '@tsconfig/node22@22.0.0':
+    resolution: {integrity: sha512-twLQ77zevtxobBOD4ToAtVmuYrpeYUh3qh+TEp+08IWhpsrIflVHqQ1F1CiPxQGL7doCdBIOOCF+1Tm833faNg==}
+
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
 
@@ -849,9 +855,6 @@ packages:
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
-
-  '@types/node@20.16.10':
-    resolution: {integrity: sha512-vQUKgWTjEIRFCvK6CyriPH3MZYiYlNy0fKiEYHWbcoWLEgs4opurGGKlebrTLqdSMIbXImH6XExNiIyNUv3WpA==}
 
   '@types/node@22.7.4':
     resolution: {integrity: sha512-y+NPi1rFzDs1NdQHHToqeiX2TIS79SWEAw9GYhkkx8bD0ChpfqC+n2j5OXOCpzfojBEBt6DnEnnG9MY0zk1XLg==}
@@ -4081,6 +4084,8 @@ snapshots:
 
   '@tsconfig/node20@20.1.4': {}
 
+  '@tsconfig/node22@22.0.0': {}
+
   '@types/babel__core@7.20.5':
     dependencies:
       '@babel/parser': 7.25.7
@@ -4118,10 +4123,6 @@ snapshots:
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
-
-  '@types/node@20.16.10':
-    dependencies:
-      undici-types: 6.19.8
 
   '@types/node@22.7.4':
     dependencies:
@@ -6027,7 +6028,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 20.16.10
+      '@types/node': 22.7.4
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
