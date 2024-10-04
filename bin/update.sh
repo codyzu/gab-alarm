@@ -1,4 +1,5 @@
 #! /usr/bin/env sh
+set -e
 
 git pull
 pnpm install
