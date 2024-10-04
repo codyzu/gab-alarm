@@ -7,32 +7,32 @@ export const defaultSettings: Settings = {
   },
   schedule: {
     monday: {
-      day: {hours: 7, minutes: 0, sound: true},
+      day: {hours: 7, minutes: 20, sound: true},
       night: {hours: 20, minutes: 30, sound: true},
     },
     tuesday: {
-      day: {hours: 7, minutes: 0, sound: true},
+      day: {hours: 7, minutes: 20, sound: true},
       night: {hours: 20, minutes: 30, sound: true},
     },
     wednesday: {
-      day: {hours: 7, minutes: 0, sound: true},
+      day: {hours: 7, minutes: 50, sound: true},
       night: {hours: 20, minutes: 30, sound: true},
     },
     thursday: {
-      day: {hours: 7, minutes: 0, sound: true},
+      day: {hours: 7, minutes: 20, sound: true},
       night: {hours: 20, minutes: 30, sound: true},
     },
     friday: {
-      day: {hours: 7, minutes: 0, sound: true},
-      night: {hours: 20, minutes: 30, sound: true},
+      day: {hours: 7, minutes: 20, sound: true},
+      night: {hours: 21, minutes: 0, sound: true},
     },
     saturday: {
-      day: {hours: 8, minutes: 0, sound: false},
+      day: {hours: 8, minutes: 30, sound: false},
       night: {hours: 21, minutes: 0, sound: true},
     },
     sunday: {
-      day: {hours: 8, minutes: 0, sound: false},
-      night: {hours: 21, minutes: 0, sound: true},
+      day: {hours: 8, minutes: 30, sound: false},
+      night: {hours: 20, minutes: 30, sound: true},
     },
   },
 };
