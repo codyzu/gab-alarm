@@ -2,8 +2,6 @@ import {useCallback, useEffect, useState} from 'react';
 import {
   settingsSchema,
   type Settings,
-  type Day,
-  type When,
   days,
   dateToMinutes,
   timeToMinutes,
@@ -37,8 +35,11 @@ async function putSettings(settings: Settings) {
   }
 }
 
+// Type FormSettings = settingsSchema.omit()
+
 export function useRawSchedule() {
-  const [settings, setSettings] = useState<Settings>(defaultSettings);
+  const [serverSettings, setServerSettings] =
+    useState<Settings>(defaultSettings);
 
   useEffect(() => {
     let cancel = false;
@@ -50,7 +51,7 @@ export function useRawSchedule() {
         return;
       }
 
-      setSettings(nextSettings);
+      setServerSettings(nextSettings);
     }
 
     void loadSettings();
@@ -60,110 +61,15 @@ export function useRawSchedule() {
     };
   }, []);
 
-  const saveSettings = useCallback(async () => {
-    await putSettings(settings);
-  }, [settings]);
-
-  const setScheduleTransition = useCallback(
-    (time: Time, day: Day, when: When) => {
-      setSettings((currentSettings) => {
-        return {
-          ...currentSettings,
-          schedule: {
-            ...currentSettings.schedule,
-            [day]: {
-              ...currentSettings.schedule[day],
-              [when]: {
-                ...currentSettings.schedule[day][when],
-                ...time,
-              },
-            },
-          },
-        };
-      });
-    },
+  const isOverrideEnabled = useCallback(
+    (settings: Settings, now: Date) => applyOverride(settings, now).override,
     [],
   );
-
-  const setScheduleSound = useCallback(
-    (sound: boolean, day: Day, when: When) => {
-      setSettings((currentSettings) => {
-        return {
-          ...currentSettings,
-          schedule: {
-            ...currentSettings.schedule,
-            [day]: {
-              ...currentSettings.schedule[day],
-              [when]: {
-                ...currentSettings.schedule[day][when],
-                sound,
-              },
-            },
-          },
-        };
-      });
-    },
-    [],
-  );
-
-  const setOverrideTime = useCallback((time: Time) => {
-    setSettings((currentSettings) => {
-      return {
-        ...currentSettings,
-        override: {
-          ...currentSettings.override,
-          transition: {
-            ...currentSettings.override.transition,
-            ...time,
-          },
-          setAt: new Date().toISOString(),
-        },
-      };
-    });
-  }, []);
-
-  const setOverrideSound = useCallback((sound: boolean) => {
-    setSettings((currentSettings) => {
-      return {
-        ...currentSettings,
-        override: {
-          ...currentSettings.override,
-          transition: {
-            ...currentSettings.override.transition,
-            sound,
-          },
-          setAt: new Date().toISOString(),
-        },
-      };
-    });
-  }, []);
-
-  const resetOverride = useCallback(() => {
-    setSettings((currentSettings) => ({
-      ...currentSettings,
-      override: {
-        ...currentSettings.override,
-        setAt: defaultSettings.override.setAt,
-      },
-    }));
-  }, []);
-
-  const resetToDefaults = useCallback(() => {
-    setSettings(defaultSettings);
-  }, []);
-
-  const {override} = applyOverride(settings, new Date());
 
   return {
-    settings,
-    saveSettings,
-    setScheduleTransition,
-    setScheduleSound,
-    setOverrideTime,
-    setOverrideSound,
-    resetToDefaults,
-    override,
-    resetOverride,
+    serverSettings,
+    putSettings,
+    isOverrideEnabled,
   };
 }
 
@@ -200,7 +106,7 @@ function applyOverride(
     overrideDate.getDate() === now.getDate()
   ) {
     override = true;
-    if (overrideSetAtMinutes > timeToMinutes(todaySchedule.day)) {
+    if (overrideSetAtMinutes > timeToMinutes(todaySchedule.day.time)) {
       // Set after todays day?
       // Override tomorrow morning
       sched[tomorrowName] = {
@@ -221,7 +127,7 @@ function applyOverride(
     overrideDate.getMonth() === yesterdayDate.getMonth() &&
     overrideDate.getDate() === yesterdayDate.getDate() &&
     // After the yesterday day?
-    overrideSetAtMinutes > timeToMinutes(yesterdaySchedule.day)
+    overrideSetAtMinutes > timeToMinutes(yesterdaySchedule.day.time)
   ) {
     override = true;
     // Override this morning
@@ -246,8 +152,8 @@ export function useFunctionalSchedule(now: Date, settings: Settings) {
   const tomorrow = sched[tomorrowName];
 
   const nowMinutes = dateToMinutes(now);
-  const todayDayMinutes = timeToMinutes(today.day);
-  const todayNightMinutes = timeToMinutes(today.night);
+  const todayDayMinutes = timeToMinutes(today.day.time);
+  const todayNightMinutes = timeToMinutes(today.night.time);
 
   let lowerLimit: Time;
   let lowerLimitMinutes: number;
@@ -257,24 +163,24 @@ export function useFunctionalSchedule(now: Date, settings: Settings) {
 
   if (nowMinutes < todayDayMinutes) {
     // Before today morning
-    lowerLimit = yesterday.night;
-    lowerLimitMinutes = timeToMinutes(yesterday.night);
-    upperLimit = today.day;
-    upperLimitMinutes = timeToMinutes(today.day) + minutesPerDay;
+    lowerLimit = yesterday.night.time;
+    lowerLimitMinutes = timeToMinutes(yesterday.night.time);
+    upperLimit = today.day.time;
+    upperLimitMinutes = timeToMinutes(today.day.time) + minutesPerDay;
     sound = yesterday.night.sound;
   } else if (nowMinutes < todayNightMinutes) {
     // Before today night
-    lowerLimit = today.day;
-    lowerLimitMinutes = timeToMinutes(today.day) + minutesPerDay;
-    upperLimit = today.night;
-    upperLimitMinutes = timeToMinutes(today.night) + minutesPerDay;
+    lowerLimit = today.day.time;
+    lowerLimitMinutes = timeToMinutes(today.day.time) + minutesPerDay;
+    upperLimit = today.night.time;
+    upperLimitMinutes = timeToMinutes(today.night.time) + minutesPerDay;
     sound = today.day.sound;
   } else {
     // After today night
-    lowerLimit = today.night;
-    lowerLimitMinutes = timeToMinutes(today.night) + minutesPerDay;
-    upperLimit = tomorrow.day;
-    upperLimitMinutes = timeToMinutes(tomorrow.day) + minutesPerDay * 2;
+    lowerLimit = today.night.time;
+    lowerLimitMinutes = timeToMinutes(today.night.time) + minutesPerDay;
+    upperLimit = tomorrow.day.time;
+    upperLimitMinutes = timeToMinutes(tomorrow.day.time) + minutesPerDay * 2;
     sound = today.night.sound;
   }
 

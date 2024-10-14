@@ -1,4 +1,5 @@
 import {type Time} from 'shared';
+import {useController} from 'react-hook-form';
 
 function timeStringToTime(time: string) {
   return {
@@ -9,17 +10,20 @@ function timeStringToTime(time: string) {
 
 export default function TransitionControl({
   label,
-  time,
-  isSoundEnabled,
-  setTime,
-  setSound,
+  settingsKey,
+  onChange,
 }: {
   readonly label: string;
-  readonly time: Time;
-  readonly setTime: (time: Time) => void;
-  readonly isSoundEnabled: boolean;
-  readonly setSound: (sound: boolean) => void;
+  readonly settingsKey: string;
+  readonly onChange?: () => void;
 }) {
+  const {field: timeField} = useController({
+    name: `${settingsKey}.time`,
+  });
+  const {field: soundField} = useController({
+    name: `${settingsKey}.sound`,
+  });
+
   return (
     <>
       <label className="grid grid-cols-subgrid col-span-2 gap-x-4">
@@ -27,11 +31,15 @@ export default function TransitionControl({
         <input
           className="text-black rounded text-center focus:outline-green justify-self-start px-2"
           type="time"
-          value={`${time.hours.toString().padStart(2, '0')}:${time.minutes
+          {...timeField}
+          value={`${(timeField.value as Time).hours.toString().padStart(2, '0')}:${(
+            timeField.value as Time
+          ).minutes
             .toString()
             .padStart(2, '0')}`}
           onChange={(event) => {
-            setTime(timeStringToTime(event.target.value));
+            timeField.onChange(timeStringToTime(event.target.value));
+            onChange?.();
           }}
         />
       </label>
@@ -40,9 +48,11 @@ export default function TransitionControl({
         <input
           className="focus:outline-green justify-self-start h-full aspect-square"
           type="checkbox"
-          checked={isSoundEnabled}
+          {...soundField}
+          checked={soundField.value as boolean}
           onChange={(event) => {
-            setSound(event.target.checked);
+            soundField.onChange(event.target.checked);
+            onChange?.();
           }}
         />
       </label>

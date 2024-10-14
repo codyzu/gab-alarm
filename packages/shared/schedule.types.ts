@@ -3,7 +3,7 @@ import {z} from 'zod';
 const timeSchema = z.object({hours: z.number(), minutes: z.number()});
 export type Time = z.infer<typeof timeSchema>;
 
-const transitionSchema = timeSchema.extend({sound: z.boolean()});
+const transitionSchema = z.object({time: timeSchema, sound: z.boolean()});
 export type Transition = z.infer<typeof transitionSchema>;
 
 const overrideSchema = z.object({
