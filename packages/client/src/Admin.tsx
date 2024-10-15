@@ -1,17 +1,14 @@
 import clsx from 'clsx';
-// Import {useForm} from 'react-hook-form';
 import {FormProvider, useForm} from 'react-hook-form';
 import {type Settings} from 'shared';
 import {useEffect, useState} from 'react';
 import {days} from '../../shared/schedule.types.ts';
 import DayControl from './DayControl';
 import TransitionControl from './TransitionControl';
-import {useRawSchedule} from './schedule';
+import {getSettings, isOverrideEnabled, putSettings} from './schedule';
 import {defaultSettings} from './default-settings.ts';
 
 export default function Admin() {
-  const {getSettings, putSettings, isOverrideEnabled} = useRawSchedule();
-
   const methods = useForm({
     defaultValues: getSettings,
   });

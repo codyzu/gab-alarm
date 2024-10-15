@@ -14,7 +14,7 @@ import App from './App.tsx';
 import Admin from './Admin.tsx';
 import './index.css';
 
-console.log('mode', import.meta.env.PROD);
+console.log('production mode', import.meta.env.PROD);
 
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null // Render nothing in production

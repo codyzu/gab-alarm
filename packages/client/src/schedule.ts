@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   settingsSchema,
   type Settings,
@@ -12,7 +12,7 @@ import {
 } from '../../shared/schedule.types.ts';
 import {defaultSettings} from './default-settings';
 
-async function getSettings(): Promise<Settings> {
+export async function getSettings(): Promise<Settings> {
   const response = await fetch('/schedule');
   const data: unknown = await response.json();
 
@@ -20,7 +20,7 @@ async function getSettings(): Promise<Settings> {
   return settingsSchema.parse(data);
 }
 
-async function putSettings(settings: Settings) {
+export async function putSettings(settings: Settings) {
   const result = await fetch('/schedule', {
     method: 'POST',
     headers: {
@@ -35,43 +35,8 @@ async function putSettings(settings: Settings) {
   }
 }
 
-// Type FormSettings = settingsSchema.omit()
-
-export function useRawSchedule() {
-  const [serverSettings, setServerSettings] =
-    useState<Settings>(defaultSettings);
-
-  useEffect(() => {
-    let cancel = false;
-
-    async function loadSettings() {
-      const nextSettings = await getSettings();
-
-      if (cancel) {
-        return;
-      }
-
-      setServerSettings(nextSettings);
-    }
-
-    void loadSettings();
-
-    return () => {
-      cancel = true;
-    };
-  }, []);
-
-  const isOverrideEnabled = useCallback(
-    (settings: Settings, now: Date) => applyOverride(settings, now).override,
-    [],
-  );
-
-  return {
-    serverSettings,
-    getSettings,
-    putSettings,
-    isOverrideEnabled,
-  };
+export function isOverrideEnabled(settings: Settings, now: Date) {
+  return applyOverride(settings, now).override;
 }
 
 const minutesPerDay = 60 * 24;
