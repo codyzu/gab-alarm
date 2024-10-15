@@ -16,8 +16,13 @@ export async function getSettings(): Promise<Settings> {
   const response = await fetch('/schedule');
   const data: unknown = await response.json();
 
-  // Throws if the data is invalid, resulting in the default schedule in the state
-  return settingsSchema.parse(data);
+  try {
+    return settingsSchema.parse(data);
+  } catch (error) {
+    console.error(error);
+    console.error('Loading default settings');
+    return defaultSettings;
+  }
 }
 
 export async function putSettings(settings: Settings) {
@@ -174,7 +179,7 @@ export function useFunctionalSchedule(now: Date, settings: Settings) {
 export function usePolledSettings() {
   const [settings, setSettings] = useState<Settings>(defaultSettings);
 
-  // Load the settings on on mount
+  // Poll settings at an interval
   useEffect(() => {
     let cancel = false;
 
@@ -188,25 +193,11 @@ export function usePolledSettings() {
       setSettings(nextSettings);
     }
 
+    // Load on first mount
     void loadSettings();
 
-    return () => {
-      cancel = true;
-    };
-  }, []);
-
-  // Poll settings at an interval
-  useEffect(() => {
-    let cancel = false;
-    const handle = setInterval(async () => {
-      const nextSettings = await getSettings();
-
-      if (cancel) {
-        return;
-      }
-
-      setSettings(nextSettings);
-    }, 5000);
+    // Poll every 5 seconds
+    const handle = setInterval(loadSettings, 5000);
 
     return () => {
       cancel = true;
