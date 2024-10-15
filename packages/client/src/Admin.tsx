@@ -2,6 +2,7 @@ import clsx from 'clsx';
 // Import {useForm} from 'react-hook-form';
 import {FormProvider, useForm} from 'react-hook-form';
 import {type Settings} from 'shared';
+import {useEffect, useState} from 'react';
 import {days} from '../../shared/schedule.types.ts';
 import DayControl from './DayControl';
 import TransitionControl from './TransitionControl';
@@ -9,20 +10,38 @@ import {useRawSchedule} from './schedule';
 import {defaultSettings} from './default-settings.ts';
 
 export default function Admin() {
-  const {serverSettings, putSettings, isOverrideEnabled} = useRawSchedule();
+  const {getSettings, putSettings, isOverrideEnabled} = useRawSchedule();
 
   const methods = useForm({
-    defaultValues: defaultSettings,
-    values: serverSettings,
+    defaultValues: getSettings,
   });
 
-  const onSubmit = async (data: Settings) => putSettings(data);
+  const [submittedData, setSubmittedData] = useState<Settings>();
+  const onSubmit = async (data: Settings) => {
+    await putSettings(data);
+    setSubmittedData(data);
+  };
 
   // Must be a better way to calculate this
-  // Note that this will only change if the settings change or the current minute 🤔
   const formSettings = methods.watch();
+
+  // Respect order when resetting on submit as per the docs: https://react-hook-form.com/docs/useform/reset
+  useEffect(() => {
+    if (methods.formState.isSubmitSuccessful) {
+      methods.reset({...submittedData});
+    }
+  }, [
+    methods,
+    methods.formState.isSubmitSuccessful,
+    submittedData,
+    methods.reset,
+  ]);
+
+  if (methods.formState.isLoading) {
+    return null;
+  }
+
   const override = isOverrideEnabled(formSettings, new Date());
-  console.log(formSettings);
 
   return (
     <div className="p4">
@@ -42,7 +61,10 @@ export default function Admin() {
               label="Wakeup"
               settingsKey="override.transition"
               onChange={() => {
-                methods.setValue('override.setAt', new Date().toISOString());
+                // Update setAt anytime something is changed in the override
+                methods.setValue('override.setAt', new Date().toISOString(), {
+                  shouldDirty: true,
+                });
               }}
             />
             <input
@@ -50,7 +72,9 @@ export default function Admin() {
               className="col-start-2 px-2 py-4 border-2 border-white rounded-lg"
               value="Clear"
               onClick={() => {
-                methods.resetField('override');
+                methods.setValue('override', defaultSettings.override, {
+                  shouldDirty: true,
+                });
               }}
             />
           </div>
@@ -61,13 +85,18 @@ export default function Admin() {
             className="px-2 py-2 bg-gray-400 active:bg-gray-800 rounded justify-self-start"
             type="button"
             onClick={() => {
-              methods.reset();
+              // Don't update the default values
+              methods.reset(defaultSettings, {keepDefaultValues: true});
             }}
           >
             Defaults
           </button>
           <button
-            className="px-2 py-4 bg-green active:bg-green-800 rounded"
+            className={clsx(
+              'px-2 py-4 active:bg-green-800 rounded bg-green',
+              methods.formState.isDirty &&
+                'outline-red outline-4 outline-solid',
+            )}
             type="submit"
           >
             Save

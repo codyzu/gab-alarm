@@ -68,6 +68,7 @@ export function useRawSchedule() {
 
   return {
     serverSettings,
+    getSettings,
     putSettings,
     isOverrideEnabled,
   };
@@ -127,7 +128,9 @@ function applyOverride(
     overrideDate.getMonth() === yesterdayDate.getMonth() &&
     overrideDate.getDate() === yesterdayDate.getDate() &&
     // After the yesterday day?
-    overrideSetAtMinutes > timeToMinutes(yesterdaySchedule.day.time)
+    overrideSetAtMinutes > timeToMinutes(yesterdaySchedule.day.time) &&
+    // Override is in the future?
+    timeToMinutes(settings.override.transition.time) > dateToMinutes(now)
   ) {
     override = true;
     // Override this morning
