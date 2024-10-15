@@ -1,56 +1,25 @@
 // eslint-disable-line unicorn/filename-case
-import React, {Suspense} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import '@unocss/reset/tailwind.css';
 import 'uno.css';
-import {
-  RootRoute,
-  Route,
-  Router,
-  RouterProvider,
-  Outlet,
-} from '@tanstack/react-router';
-import App from './App.tsx';
-import Admin from './Admin.tsx';
+import {RouterProvider, createRouter} from '@tanstack/react-router';
 import './index.css';
+// Import the generated route tree
+import {routeTree} from './routeTree.gen';
 
-console.log('production mode', import.meta.env.PROD);
+// Create a new router instance
+const router = createRouter({routeTree});
 
-const TanStackRouterDevtools = import.meta.env.PROD
-  ? () => null // Render nothing in production
-  : React.lazy(async () =>
-      // Lazy load in development
-      import('@tanstack/router-devtools').then((module) => ({
-        default: module.TanStackRouterDevtools,
-      })),
-    );
-
-const rootRoute = new RootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
-});
-const indexRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/',
-  component: App,
-});
-const adminRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/admin',
-  component: Admin,
-});
-
-const routeTree = rootRoute.addChildren([indexRoute, adminRoute]);
-const router = new Router({routeTree});
+// Register the router instance for type safety
+declare module '@tanstack/react-router' {
+  type Register = {
+    router: typeof router;
+  };
+}
 
 ReactDOM.createRoot(document.querySelector('#root')!).render(
   <React.StrictMode>
-    <Suspense>
-      <RouterProvider router={router} />
-    </Suspense>
+    <RouterProvider router={router} />
   </React.StrictMode>,
 );

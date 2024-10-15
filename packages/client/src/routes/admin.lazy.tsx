@@ -1,14 +1,19 @@
+import {createLazyFileRoute} from '@tanstack/react-router';
 import clsx from 'clsx';
 import {FormProvider, useForm} from 'react-hook-form';
 import {type Settings} from 'shared';
 import {useEffect, useState} from 'react';
-import {days} from '../../shared/schedule.types.ts';
-import DayControl from './DayControl';
-import TransitionControl from './TransitionControl';
-import {getSettings, isOverrideEnabled, putSettings} from './schedule';
-import {defaultSettings} from './default-settings.ts';
+import {days} from '../../../shared/schedule.types.ts';
+import DayControl from '../DayControl.tsx';
+import TransitionControl from '../TransitionControl.tsx';
+import {getSettings, isOverrideEnabled, putSettings} from '../schedule.ts';
+import {defaultSettings} from '../default-settings.ts';
 
-export default function Admin() {
+export const Route = createLazyFileRoute('/admin')({
+  component: Admin,
+});
+
+function Admin() {
   const methods = useForm({
     defaultValues: getSettings,
   });

@@ -1,12 +1,17 @@
+import {createLazyFileRoute} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import clsx from 'clsx';
 import {useSound} from 'use-sound';
 import {type ClockMode} from 'shared';
-import wake from './assets/rooster.mp3';
-import sleep from './assets/cricket.mp3';
-import {useFunctionalSchedule, usePolledSettings} from './schedule';
+import {useFunctionalSchedule, usePolledSettings} from '../schedule';
+import wake from '../assets/rooster.mp3';
+import sleep from '../assets/cricket.mp3';
 
-function App() {
+export const Route = createLazyFileRoute('/')({
+  component: Index,
+});
+
+function Index() {
   const [playWake] = useSound(wake);
   const [playSleep] = useSound(sleep);
 
@@ -193,5 +198,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
