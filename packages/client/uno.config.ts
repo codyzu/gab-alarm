@@ -42,7 +42,8 @@ export default defineConfig({
       provider: 'google',
       fonts: {
         // Mono: ['Inconsolata'],
-        mono: ['Roboto Mono'],
+        // mono: ['Roboto Mono'],
+        mono: ['Noto Sans Mono'],
         sans: [
           // {
           //   name: 'Jura',
@@ -52,9 +53,12 @@ export default defineConfig({
           //   name: 'Saira Condensed',
           //   weights: ['400', '600'],
           // },
+          // {
+          //   name: 'Pixelify Sans',
+          //   weights: ['400', '500'],
+          // },
           {
-            name: 'Pixelify Sans',
-            weights: ['400', '500'],
+            name: 'Nunito',
           },
           // I like Abel, but it is only 400 weight and the bold is ugly on safari.
           // {
