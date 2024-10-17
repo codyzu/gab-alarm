@@ -59,6 +59,7 @@ export default defineConfig({
           // },
           {
             name: 'Nunito',
+            weights: ['400', '800'],
           },
           // I like Abel, but it is only 400 weight and the bold is ugly on safari.
           // {
@@ -83,12 +84,18 @@ export default defineConfig({
   ],
   transformers: [transformerDirectives(), transformerVariantGroup()],
   shortcuts: {
-    'border-primary': 'rounded-md border-2 border-teal',
-    'shadow-primary': 'shadow-xl shadow-teal-800',
+    'text-active': 'text-green',
+    'text-alert': 'text-red',
+    'border-primary': 'rounded-full border-1 border-white',
+    'shadow-primary': 'shadow-xl shadow-blue-800',
+    'bg-primary': 'bg-blue-950',
+    'text-primary': 'text-white',
     'border-focus': 'rounded-md border-2 border-violet-700',
     'shadow-focus': 'shadow-xl shadow-violet-700',
     'outline-focus': 'outline outline-2 outline-gray-200',
-    btn: 'py-2 px-4 font-medium shadow-primary  border-primary bg-black',
+    btn: 'py-2 px-6 font-medium shadow-primary  border-primary bg-blue-9 active:bg-slate-5',
+    'btn-primary': 'btn bg-sky-1 text-black font-bold',
+    'btn-secondary': 'btn bg-transparent',
     input:
       'p-2 shadow-primary border-primary bg-gray-900 text-white focus-visible:(border-focus outline-focus shadow-focus)',
     header:

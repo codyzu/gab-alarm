@@ -26,57 +26,57 @@ export default function TransitionControl({
   });
 
   return (
-    <>
-      <label className="grid grid-cols-subgrid col-span-2 gap-x-4">
-        <div className="justify-self-end flex flex-row items-center gap-2">
-          {transitionMode === 'day' ? 'Wakeup' : 'Bedtime'} time
+    <div className="flex flex-row items-center">
+      <div className="flex flex-col items-center flex-grow">
+        <div
+          className={clsx(
+            'h-16 w-16',
+            transitionMode === 'day'
+              ? 'i-fluent-emoji-sun-with-face'
+              : 'i-fluent-emoji-full-moon-face',
+          )}
+        />
+        <div className="font-bold">
+          {transitionMode === 'day' ? 'Wake' : 'Sleep'}
+        </div>
+      </div>
+      <div className="flex flex-col justify-center gap-4">
+        <label className="flex flex-row justify-end gap-4 items-center">
+          <div>time</div>
+          <input
+            className="text-black rounded text-center focus:outline-green justify-self-start p4 font-mono"
+            type="time"
+            {...timeField}
+            value={`${(timeField.value as Time).hours.toString().padStart(2, '0')}:${(
+              timeField.value as Time
+            ).minutes
+              .toString()
+              .padStart(2, '0')}`}
+            onChange={(event) => {
+              timeField.onChange(timeStringToTime(event.target.value));
+              onChange?.();
+            }}
+          />
+        </label>
+        <button
+          type="button"
+          className="btn flex flex-row items-center justify-center gap-4"
+          onClick={() => {
+            soundField.onChange(!soundField.value);
+            onChange?.();
+          }}
+        >
+          <div>{soundField.value ? 'sound on' : 'sound off'}</div>
           <div
             className={clsx(
               'h-8 w-8',
-              transitionMode === 'day'
-                ? 'i-fluent-emoji-sun-with-face'
-                : 'i-fluent-emoji-full-moon-face',
+              soundField.value
+                ? 'i-pixelarticons-volume-3 text-active'
+                : 'i-pixelarticons-volume-x text-alert',
             )}
           />
-        </div>
-        <input
-          className="text-black rounded text-center focus:outline-green justify-self-start px-2"
-          type="time"
-          {...timeField}
-          value={`${(timeField.value as Time).hours.toString().padStart(2, '0')}:${(
-            timeField.value as Time
-          ).minutes
-            .toString()
-            .padStart(2, '0')}`}
-          onChange={(event) => {
-            timeField.onChange(timeStringToTime(event.target.value));
-            onChange?.();
-          }}
-        />
-      </label>
-      <label className="grid grid-cols-subgrid col-span-2 gap-x-4">
-        <div className="justify-self-end flex flex-row items-center gap-2">
-          {transitionMode === 'day' ? 'Wakeup' : 'Bedtime'} sound
-          <div
-            className={clsx(
-              'h-8 w-8',
-              transitionMode === 'day'
-                ? 'i-fluent-emoji-sun-with-face'
-                : 'i-fluent-emoji-full-moon-face',
-            )}
-          />
-        </div>
-        <input
-          className="focus:outline-green justify-self-start h-full aspect-square"
-          type="checkbox"
-          {...soundField}
-          checked={soundField.value as boolean}
-          onChange={(event) => {
-            soundField.onChange(event.target.checked);
-            onChange?.();
-          }}
-        />
-      </label>
-    </>
+        </button>
+      </div>
+    </div>
   );
 }
