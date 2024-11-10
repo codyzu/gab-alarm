@@ -4,6 +4,9 @@ import fastifyFactory from 'fastify';
 import fastifyStatic from '@fastify/static';
 import {execa} from 'execa';
 import {settingsSchema} from 'shared';
+import {serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
+import {settings} from './settings.ts';
+import {clock} from './clock.ts';
 
 const fastify = fastifyFactory({
   // Logger: true,
@@ -14,6 +17,13 @@ const fastify = fastifyFactory({
     },
   },
 });
+
+// Allow routes to use zod for the schemas
+fastify.setValidatorCompiler(validatorCompiler);
+fastify.setSerializerCompiler(serializerCompiler);
+
+await fastify.register(settings);
+await fastify.register(clock);
 
 await fastify.register(fastifyStatic, {
   root: new URL('node_modules/client/dist', import.meta.url),

@@ -57,4 +57,13 @@ export function dateToMinutes(date: Date): number {
   return date.getHours() * 60 + date.getMinutes();
 }
 
-export type ClockMode = 'day' | 'night';
+export const clockModeSchema = z.enum(['day', 'night']);
+export type ClockMode = z.infer<typeof clockModeSchema>;
+
+export const clockStateSchema = z.object({
+  nextTransition: z.string().datetime({offset: true}),
+  previousTransition: z.string().datetime({offset: true}),
+  nextMode: clockModeSchema,
+  currentMode: clockModeSchema,
+});
+export type ClockState = z.infer<typeof clockStateSchema>;
