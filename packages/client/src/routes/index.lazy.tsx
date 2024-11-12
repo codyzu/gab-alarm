@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import clsx from 'clsx';
 import {useSound} from 'use-sound';
 import {type ClockState, type ClockMode} from 'shared';
-import useWebSocket from 'react-use-websocket';
+import useWebSocket, {ReadyState} from 'react-use-websocket';
 import wake from '../assets/rooster.mp3';
 import sleep from '../assets/cricket.mp3';
 
@@ -15,11 +15,14 @@ function Index() {
   const [playWake] = useSound(wake);
   const [playSleep] = useSound(sleep);
 
-  const {lastJsonMessage} = useWebSocket(`ws://${window.location.host}/ws`, {
-    shouldReconnect: () => true,
-    reconnectInterval: 5000,
-    reconnectAttempts: 10_000,
-  });
+  const {lastJsonMessage, readyState} = useWebSocket(
+    `ws://${window.location.host}/ws`,
+    {
+      shouldReconnect: () => true,
+      reconnectInterval: 5000,
+      reconnectAttempts: 10_000,
+    },
+  );
 
   const clockState: ClockState | undefined =
     (lastJsonMessage as ClockState) ?? undefined;
@@ -201,6 +204,18 @@ function Index() {
             .padStart(2, '0')}
         </div>
       </div>
+      <div
+        className={clsx(
+          'absolute top-5 left-5 w-1 h-1 rounded-full',
+          readyState === ReadyState.OPEN
+            ? 'bg-green-500'
+            : [ReadyState.CONNECTING, ReadyState.UNINSTANTIATED].includes(
+                  readyState,
+                )
+              ? 'bg-yellow-500'
+              : 'bg-red-500',
+        )}
+      />
     </div>
   );
 }
