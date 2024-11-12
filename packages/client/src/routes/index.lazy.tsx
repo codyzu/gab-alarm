@@ -2,8 +2,8 @@ import {createLazyFileRoute} from '@tanstack/react-router';
 import {useEffect, useState} from 'react';
 import clsx from 'clsx';
 import {useSound} from 'use-sound';
-import {type ClockMode} from 'shared';
-import {useFunctionalSchedule, usePolledSettings} from '../schedule';
+import {type ClockState, type ClockMode} from 'shared';
+import useWebSocket from 'react-use-websocket';
 import wake from '../assets/rooster.mp3';
 import sleep from '../assets/cricket.mp3';
 
@@ -15,44 +15,42 @@ function Index() {
   const [playWake] = useSound(wake);
   const [playSleep] = useSound(sleep);
 
-  const [time, setTime] = useState(new Date());
+  const {lastJsonMessage} = useWebSocket(`ws://${window.location.host}/ws`, {
+    shouldReconnect: () => true,
+    reconnectInterval: 5000,
+    reconnectAttempts: 10_000,
+  });
 
-  const settings = usePolledSettings();
-  const {
-    upperLimit,
-    percent,
-    clockMode: calculatedMode,
-    sound: calculatedSound,
-  } = useFunctionalSchedule(time, settings);
+  const clockState: ClockState | undefined =
+    (lastJsonMessage as ClockState) ?? undefined;
+
+  useEffect(() => {
+    console.log('lastJsonMessage', lastJsonMessage);
+  }, [lastJsonMessage]);
+
+  const [time, setTime] = useState(new Date());
+  useEffect(() => {
+    const handle = setInterval(() => {
+      setTime(new Date());
+    }, 5000);
+
+    return () => {
+      clearInterval(handle);
+    };
+  }, []);
+
+  // Console.log('clockState', clockState);
+  const percent =
+    clockState === undefined
+      ? 0
+      : ((time.getTime() - new Date(clockState.previousTransition).getTime()) *
+          100) /
+        (new Date(clockState.nextTransition).getTime() -
+          new Date(clockState.previousTransition).getTime());
 
   const [modeOverride, setModeOverride] = useState<
     {mode: ClockMode; timeoutTimestamp: number} | undefined
   >(undefined);
-
-  const clockMode: ClockMode = modeOverride?.mode ?? calculatedMode;
-  const sound: boolean = modeOverride !== undefined || calculatedSound;
-
-  const [previousMode, setPreviousMode] = useState(clockMode);
-  useEffect(() => {
-    if (clockMode !== previousMode) {
-      setPreviousMode(clockMode);
-      if (clockMode === 'day') {
-        void fetch('/morning', {method: 'POST'});
-
-        if (sound) {
-          void fetch('/morning-sound', {method: 'POST'});
-        }
-        // PlayWake();
-      } else {
-        void fetch('/night', {method: 'POST'});
-
-        if (sound) {
-          void fetch('/night-sound', {method: 'POST'});
-        }
-        // PlaySleep();
-      }
-    }
-  }, [clockMode, previousMode, playSleep, playWake, sound]);
 
   useEffect(() => {
     const handle = setInterval(() => {
@@ -99,14 +97,15 @@ function Index() {
   //   };
   // }, [keyHandlers]);
 
+  const clockMode: ClockMode =
+    modeOverride?.mode ?? clockState?.currentMode ?? 'day';
+
   return (
     <div
       className={clsx(
         'items-center gap-2dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none relative overflow-hidden',
         clockMode === 'night' && 'bg-black text-gray-400',
         clockMode === 'day' && 'bg-black',
-        // ClockMode === 'day' && 'bg-gradient-to-t from-orange-6 to-blue-6',
-        // clockMode === 'night' && 'bg-gradient-to-t from-pink-6 to-black'
       )}
       onClick={() => {
         const mode = clockMode === 'day' ? 'night' : 'day';
@@ -191,8 +190,15 @@ function Index() {
               clockMode === 'day' && 'i-fluent-emoji-full-moon-face',
             )}
           />
-          {upperLimit.hours.toString().padStart(2, '0')}:
-          {upperLimit.minutes.toString().padStart(2, '0')}
+          {new Date(clockState?.nextTransition)
+            .getHours()
+            .toString()
+            .padStart(2, '0')}
+          :
+          {new Date(clockState?.nextTransition)
+            .getMinutes()
+            .toString()
+            .padStart(2, '0')}
         </div>
       </div>
     </div>

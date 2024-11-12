@@ -19,6 +19,8 @@ export default defineConfig({
       '/schedule': 'http://localhost:3000',
       '^/morning.*': 'http://localhost:3000',
       '^/night.*': 'http://localhost:3000',
+      '/settings': 'http://localhost:3000',
+      '/ws': 'ws://localhost:3000',
       /* eslint-enable @typescript-eslint/naming-convention */
     },
   },

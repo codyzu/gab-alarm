@@ -5,6 +5,7 @@ import fastifyStatic from '@fastify/static';
 import {execa} from 'execa';
 import {settingsSchema} from 'shared';
 import {serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
+import {fastifyWebsocket} from '@fastify/websocket';
 import {settings} from './settings.ts';
 import {clock} from './clock.ts';
 
@@ -22,13 +23,22 @@ const fastify = fastifyFactory({
 fastify.setValidatorCompiler(validatorCompiler);
 fastify.setSerializerCompiler(serializerCompiler);
 
+await fastify.register(fastifyWebsocket);
 await fastify.register(settings);
 await fastify.register(clock);
-
 await fastify.register(fastifyStatic, {
   root: new URL('node_modules/client/dist', import.meta.url),
   maxAge: '1d',
   immutable: true,
+});
+
+fastify.get('/ws', {websocket: true}, (socket, request) => {
+  fastify.log.info(`Client connected: ${request.ip} ${request.hostname}`);
+  socket.on('message', (message) => {
+    fastify.log.info(`Client ${request.ip} message: ${message}`);
+  });
+
+  socket.send(JSON.stringify(fastify.clockState));
 });
 
 // @ts-expect-error params aren't used, but left here for reference

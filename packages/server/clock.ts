@@ -44,6 +44,11 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
           .diff(DateTime.now())
           .as('milliseconds') + 1000,
       );
+
+      // Update all clients of changes to the clock state
+      for (const client of fastify.websocketServer.clients) {
+        client.send(JSON.stringify(fastify.clockState));
+      }
     }
 
     fastify.get(
