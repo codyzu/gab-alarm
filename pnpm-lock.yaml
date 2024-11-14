@@ -41,6 +41,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      luxon:
+        specifier: ^3.5.0
+        version: 3.5.0
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -69,6 +72,9 @@ importers:
       '@tanstack/router-plugin':
         specifier: ^1.66.1
         version: 1.66.1(vite@5.4.9(@types/node@22.7.5)(terser@5.34.1))(webpack-sources@3.2.3)(webpack@5.95.0(esbuild@0.23.1))
+      '@types/luxon':
+        specifier: ^3.4.2
+        version: 3.4.2
       '@types/node':
         specifier: ^22.7.5
         version: 22.7.5
@@ -120,9 +126,6 @@ importers:
       '@fastify/websocket':
         specifier: ^11.0.1
         version: 11.0.1
-      '@types/luxon':
-        specifier: ^3.4.2
-        version: 3.4.2
       client:
         specifier: workspace:../client
         version: link:../client
@@ -148,6 +151,9 @@ importers:
       '@tsconfig/node22':
         specifier: ^22.0.0
         version: 22.0.0
+      '@types/luxon':
+        specifier: ^3.4.2
+        version: 3.4.2
       '@types/ws':
         specifier: ^8.5.13
         version: 8.5.13
@@ -160,6 +166,9 @@ importers:
 
   packages/shared:
     dependencies:
+      luxon:
+        specifier: ^3.5.0
+        version: 3.5.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -167,6 +176,9 @@ importers:
       '@tsconfig/node22':
         specifier: ^22.0.0
         version: 22.0.0
+      '@types/luxon':
+        specifier: ^3.4.2
+        version: 3.4.2
       typescript:
         specifier: ^5.6.3
         version: 5.6.3

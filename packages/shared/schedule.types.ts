@@ -65,5 +65,6 @@ export const clockStateSchema = z.object({
   previousTransition: z.string().datetime({offset: true}),
   nextMode: clockModeSchema,
   currentMode: clockModeSchema,
+  isOverrideActive: z.boolean(),
 });
 export type ClockState = z.infer<typeof clockStateSchema>;
