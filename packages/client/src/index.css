@@ -67,6 +67,10 @@ button:focus-visible {
   }
 } */
 
+html {
+  --uno: touch-none select-none;
+}
+
 body {
   --uno: m-0 bg-black text-white font-sans text-xl tracking-normal;
 }

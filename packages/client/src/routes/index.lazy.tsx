@@ -106,7 +106,7 @@ function Index() {
   return (
     <div
       className={clsx(
-        'items-center gap-2dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear select-none relative overflow-hidden',
+        'items-center gap-2dvh align-start h-100dvh w-100dvw transition transition-all duration-1000 ease-linear relative overflow-hidden',
         clockMode === 'night' && 'bg-black text-gray-400',
         clockMode === 'day' && 'bg-black',
       )}
