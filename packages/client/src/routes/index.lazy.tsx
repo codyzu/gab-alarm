@@ -165,7 +165,7 @@ function Index() {
         <div className="w-full h-full relative">
           <div
             className={clsx(
-              'animate-fill-forwards absolute top-0 left-0 h-full w-full animate-duration-2000 text-yellow i-fluent-emoji-rooster',
+              'animate-fill-forwards absolute top-0 left-0 h-full w-full animate-duration-2000 text-yellow i-fluent-emoji-unicorn',
               clockMode === 'day'
                 ? 'animate-bounce-in-up'
                 : 'animate-bounce-out-up',
@@ -173,7 +173,7 @@ function Index() {
           />
           <div
             className={clsx(
-              'animate-fill-forwards absolute top-0 left-0 h-full w-full animate-duration-2000 text-pink-3 i-fluent-emoji-sloth',
+              'animate-fill-forwards absolute top-0 left-0 h-full w-full animate-duration-2000 text-pink-3 i-fluent-emoji-person-in-bed-medium-dark',
               clockMode === 'night'
                 ? 'animate-bounce-in-up'
                 : 'animate-bounce-out-up',
