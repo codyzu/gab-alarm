@@ -24,6 +24,13 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
     );
     fastify.decorate('updateClockState', updateClockState);
 
+    fastify.addHook('onClose', async () => {
+      fastify.log.info('Clearing clock timeout');
+      if (handle) {
+        clearTimeout(handle);
+      }
+    });
+
     // Start the first clock transition
     updateClockState();
 
@@ -49,6 +56,9 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
       );
 
       // Update all clients of changes to the clock state
+      fastify.log.info(
+        `Sending clock state to ${fastify.websocketServer.clients.size} connected clients`,
+      );
       for (const client of fastify.websocketServer.clients) {
         client.send(JSON.stringify(fastify.clockState));
       }

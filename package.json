@@ -7,7 +7,8 @@
     "dev": "pnpm run --filter ./packages/shared build && concurrently --names SERVER,CLIENT --prefix-colors 'yellow,blue' --kill-others 'pnpm run --filter ./packages/server dev' 'pnpm run --filter ./packages/client dev'",
     "start": "pnpm run --filter ./packages/server start",
     "build": "pnpm run --filter ./packages/shared build && pnpm run --filter ./packages/client build && pnpm run --filter ./packages/server build",
-    "lint": "xo"
+    "lint": "xo",
+    "test": "pnpm run --filter ./packages/shared test && pnpm run --filter ./packages/server test"
   },
   "devDependencies": {
     "concurrently": "^9.0.1",

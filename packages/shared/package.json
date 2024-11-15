@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "test": "node --experimental-strip-types --test",
+    "test:watch": "pnpm run test --watch",
+    "test:coverage": "pnpm run test --experimental-test-coverage --test-coverage-exclude \"**/*.test.ts\"",
+    "build": "tsc && esbuild \"*.ts\" --platform=node --target=node23 --packages=external --outdir=lib"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,8 @@
   "devDependencies": {
     "@tsconfig/node22": "^22.0.0",
     "@types/luxon": "^3.4.2",
+    "@types/node": "^22.7.5",
+    "esbuild": "^0.24.0",
     "typescript": "^5.6.3"
   }
 }

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-strip-types --test",
+    "test:coverage": "pnpm run test --experimental-test-coverage --test-coverage-exclude \"**/*.test.ts\"",
+    "test:watch": "pnpm run test --watch",
     "start": "tsc && node --experimental-strip-types server.ts",
     "build": "tsc",
     "dev": "nodemon -x \"pnpm run start --dev\" -i \"schedule.json\" -e ts"

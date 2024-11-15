@@ -7,17 +7,15 @@
     // "moduleResolution": "bundler",
     // "allowSyntheticDefaultImports": true
     "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "lib",
-    "rootDir": ".",
+    // "emitDeclarationOnly": true,
+    // "outDir": "lib",
+    // "rootDir": ".",
     // "types": [
     //   "node"
     // ]
     "allowImportingTsExtensions": true,
-  },
-  "include": [
-    "*.ts"
-  ]
+    "noEmit": true
+  }
 }
 // {
 //   "extends": "@tsconfig/node22/tsconfig.json",

@@ -1,4 +1,4 @@
-import {readFile} from 'node:fs/promises';
+import fs from 'node:fs/promises';
 import {inspect} from 'node:util';
 import {fastifyPlugin} from 'fastify-plugin';
 import {settingsSchema, type ClockMode, type Settings} from 'shared';
@@ -23,7 +23,7 @@ export const settings: FastifyPluginAsyncZod = fastifyPlugin(
     let currentSettings: Settings;
     try {
       currentSettings = JSON.parse(
-        await readFile('schedule.json', 'utf8'),
+        await fs.readFile('schedule.json', 'utf8'),
       ) as Settings;
     } catch (error) {
       fastify.log.error(error);

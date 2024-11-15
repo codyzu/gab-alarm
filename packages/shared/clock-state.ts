@@ -1,5 +1,5 @@
-import {DateTime} from 'luxon';
-import {type ClockState, type Day, type Settings} from './schedule.types.js';
+import {DateTime, type DateTimeMaybeValid} from 'luxon';
+import {type ClockState, type Day, type Settings} from './schedule.types.ts';
 
 // Replace the datetime strings with luxon DateTime objects
 export type ClockStateDateTime = Omit<
@@ -12,8 +12,13 @@ export type ClockStateDateTime = Omit<
 
 export function getClockState(
   settings: Settings,
-  referenceTime: DateTime<true>,
+  referenceTime: DateTimeMaybeValid,
 ): ClockStateDateTime {
+  // Keep TypeScript happy with luxon 😢
+  if (!referenceTime.isValid) {
+    throw new Error(referenceTime.invalidExplanation ?? 'Invalid date');
+  }
+
   const override = settings.override;
   const overrideSetAt = DateTime.fromISO(override.setAt);
 
@@ -58,8 +63,12 @@ export function getClockState(
     second: 0,
     millisecond: 0,
   });
-
-  let clockState: ClockStateDateTime | undefined;
+  const overrideTime = referenceTime.set({
+    hour: override.transition.time.hours,
+    minute: override.transition.time.minutes,
+    second: 0,
+    millisecond: 0,
+  });
 
   // Override set today
   if (overrideSetAt.hasSame(referenceTime, 'day')) {
@@ -86,17 +95,28 @@ export function getClockState(
 
     // Override set before todays day?
     // Override today's morning
+    if (overrideSetAt < todayDay && referenceTime < overrideTime) {
+      return {
+        nextTransition: referenceTime.set({
+          hour: override.transition.time.hours,
+          minute: override.transition.time.minutes,
+          second: 0,
+          millisecond: 0,
+        }),
+        nextMode: 'day',
+        currentMode: 'night',
+        previousTransition: yesterdayNight,
+        isOverrideActive: true,
+      };
+    }
+
+    // Override set today, but has already ocurred
     return {
-      nextTransition: referenceTime.set({
-        hour: override.transition.time.hours,
-        minute: override.transition.time.minutes,
-        second: 0,
-        millisecond: 0,
-      }),
-      nextMode: 'day',
-      currentMode: 'night',
-      previousTransition: yesterdayNight,
-      isOverrideActive: true,
+      nextTransition: todayNight,
+      nextMode: 'night',
+      currentMode: 'day',
+      previousTransition: overrideTime,
+      isOverrideActive: false,
     };
   }
 
@@ -104,25 +124,16 @@ export function getClockState(
     // Override set yesterday
     overrideSetAt.hasSame(referenceTime.minus({days: 1}), 'day') &&
     // After the yesterday day?
-    overrideSetAt > yesterdayDay
+    overrideSetAt > yesterdayDay && // Override is in the future?
+    overrideTime > referenceTime
   ) {
-    const overrideTime = referenceTime.set({
-      hour: override.transition.time.hours,
-      minute: override.transition.time.minutes,
-      second: 0,
-      millisecond: 0,
-    });
-
-    // Override is in the future?
-    if (overrideTime > referenceTime) {
-      return {
-        nextTransition: overrideTime,
-        nextMode: 'day',
-        currentMode: 'night',
-        previousTransition: yesterdayDay,
-        isOverrideActive: true,
-      };
-    }
+    return {
+      nextTransition: overrideTime,
+      nextMode: 'day',
+      currentMode: 'night',
+      previousTransition: yesterdayDay,
+      isOverrideActive: true,
+    };
   }
 
   // No override
@@ -137,8 +148,8 @@ export function getClockState(
     };
   }
 
+  // Before today's night
   if (referenceTime < todayNight) {
-    // Before today's night
     return {
       nextTransition: todayNight,
       nextMode: 'night',
