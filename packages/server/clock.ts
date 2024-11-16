@@ -4,6 +4,7 @@ import {DateTime} from 'luxon';
 import {type FastifyPluginAsyncZod} from 'fastify-type-provider-zod';
 import {clockStateSchema} from 'shared';
 import {type ClockStateDateTime, getClockState} from 'shared/clock-state';
+import {execa} from 'execa';
 
 declare module 'fastify' {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
@@ -31,10 +32,14 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
       }
     });
 
+    // Set the initial brightness (but don't play a sound)
+    void setBrightness();
+
     // Start the first clock transition
     updateClockState();
 
     function updateClockState() {
+      const previousClockState = fastify.clockState;
       fastify.clockState = getClockState(fastify.settings, DateTime.now());
       fastify.log.info('Updating clock state');
       fastify.log.info(inspect(fastify.clockState, {colors: true}));
@@ -54,6 +59,14 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
           .diff(DateTime.now())
           .as('milliseconds') + 1000,
       );
+
+      if (previousClockState.currentMode !== fastify.clockState.currentMode) {
+        fastify.log.info(
+          `Clock mode changed to ${fastify.clockState.currentMode}`,
+        );
+        void setBrightness();
+        void playSound();
+      }
 
       // Update all clients of changes to the clock state
       fastify.log.info(
@@ -86,5 +99,34 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
         return response;
       },
     );
+
+    async function playSound() {
+      try {
+        return await execa(
+          fastify.clockState.currentMode === 'day'
+            ? './bin/wake-sound.sh'
+            : './bin/sleep-sound.sh',
+        );
+      } catch (error) {
+        fastify.log.error(
+          `Error playing sound for '${fastify.clockState.currentMode}'`,
+        );
+        fastify.log.error(error);
+      }
+    }
+
+    async function setBrightness() {
+      const level = fastify.clockState.currentMode === 'day' ? 255 : 0;
+      try {
+        return await execa('sudo', [
+          '-n',
+          './bin/set-brightness.sh',
+          level.toString(),
+        ]);
+      } catch (error) {
+        fastify.log.error(`Error setting brightness '${level}'`);
+        fastify.log.error(error);
+      }
+    }
   },
 );

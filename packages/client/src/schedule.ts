@@ -2,7 +2,7 @@ import {settingsSchema, type Settings} from 'shared';
 import {defaultSettings} from './default-settings';
 
 export async function getSettings(): Promise<Settings> {
-  const response = await fetch('/schedule');
+  const response = await fetch('/settings');
   const data: unknown = await response.json();
 
   try {
@@ -15,7 +15,7 @@ export async function getSettings(): Promise<Settings> {
 }
 
 export async function putSettings(settings: Settings) {
-  const result = await fetch('/schedule', {
+  const result = await fetch('/settings', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
