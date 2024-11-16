@@ -32,6 +32,17 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
       }
     });
 
+    // Update the clock state when settings are successfully updated
+    fastify.addHook('onResponse', async (request, reply) => {
+      if (
+        request.method === 'POST' &&
+        request.routeOptions.url === '/settings' &&
+        reply.statusCode === 201
+      ) {
+        updateClockState();
+      }
+    });
+
     // Set the initial brightness (but don't play a sound)
     void setBrightness();
 
@@ -128,5 +139,12 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
         fastify.log.error(error);
       }
     }
+  },
+  {
+    name: 'clock',
+    dependencies: ['settings', '@fastify/websocket'],
+    decorators: {
+      fastify: ['websocketServer'],
+    },
   },
 );

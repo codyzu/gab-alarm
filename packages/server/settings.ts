@@ -20,16 +20,7 @@ export const settings: FastifyPluginAsyncZod = fastifyPlugin(
   // @ts-expect-error options aren't used, but left here for reference
   async (fastify, options) => {
     // Load settings or use defaults
-    let currentSettings: Settings;
-    try {
-      currentSettings = JSON.parse(
-        await fs.readFile('schedule.json', 'utf8'),
-      ) as Settings;
-    } catch (error) {
-      fastify.log.error(error);
-      fastify.log.error('Error reading settings.json, using default settings');
-      currentSettings = defaultSettings;
-    }
+    const currentSettings = await readSettings();
 
     fastify.log.info(
       `Loaded settings: ${inspect(currentSettings, {depth: 8, colors: true})}`,
@@ -60,12 +51,28 @@ export const settings: FastifyPluginAsyncZod = fastifyPlugin(
           body: settingsSchema,
         },
       },
-      // @ts-expect-error params aren't used, but left here for reference
       async (request, reply) => {
         fastify.settings = request.body;
-        request.server.updateClockState();
-        return fastify.settings;
+        await writeSettings(fastify.settings);
+        return reply.status(201).send(fastify.settings);
       },
     );
   },
+  {
+    name: 'settings',
+  },
 );
+
+async function readSettings() {
+  try {
+    return JSON.parse(await fs.readFile('schedule.json', 'utf8')) as Settings;
+  } catch (error) {
+    console.error(error);
+    console.error('Error reading schedule.json, using default settings');
+    return defaultSettings;
+  }
+}
+
+async function writeSettings(settings: Settings) {
+  await fs.writeFile('schedule.json', JSON.stringify(settings, null, 2));
+}
