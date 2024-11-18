@@ -74,10 +74,19 @@ export function getClockState(
   if (overrideSetAt.hasSame(referenceTime, 'day')) {
     if (
       // Set after todays day?
-      overrideSetAt > todayDay &&
-      // Today's day already passed?
-      referenceTime > todayNight
+      overrideSetAt > todayDay
     ) {
+      // Override enabled, but for tomorrow
+      if (referenceTime < todayNight) {
+        return {
+          nextTransition: todayNight,
+          nextMode: 'night',
+          currentMode: 'day',
+          previousTransition: todayDay,
+          isOverrideActive: true,
+        };
+      }
+
       // Override tomorrow morning
       return {
         nextTransition: referenceTime.plus({days: 1}).set({
@@ -131,7 +140,7 @@ export function getClockState(
       nextTransition: overrideTime,
       nextMode: 'day',
       currentMode: 'night',
-      previousTransition: yesterdayDay,
+      previousTransition: yesterdayNight,
       isOverrideActive: true,
     };
   }
