@@ -6,7 +6,7 @@ import {
   type ZodTypeProvider,
   type FastifyPluginAsyncZod,
 } from 'fastify-type-provider-zod';
-import {defaultSettings} from './default-settings.ts';
+import {defaultSettings} from 'shared/default-settings';
 
 declare module 'fastify' {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions

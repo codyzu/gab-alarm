@@ -19,7 +19,8 @@
   "type": "module",
   "exports": {
     ".": "./lib/schedule.types.js",
-    "./clock-state": "./lib/clock-state.js"
+    "./clock-state": "./lib/clock-state.js",
+    "./default-settings": "./lib/default-settings.js"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.0",

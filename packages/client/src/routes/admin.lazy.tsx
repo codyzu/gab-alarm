@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import {FormProvider, useForm} from 'react-hook-form';
 import {type Day, type Settings, days} from 'shared';
 import {useEffect, useState} from 'react';
+import {defaultSettings} from 'shared/default-settings';
 import DayControl from '../DayControl.tsx';
 import {getSettings, putSettings} from '../schedule.ts';
-import {defaultSettings} from '../default-settings.ts';
 import OverrideControl from '../OverrideControl.tsx';
 
 export const Route = createLazyFileRoute('/admin')({

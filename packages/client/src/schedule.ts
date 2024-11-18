@@ -1,5 +1,5 @@
 import {settingsSchema, type Settings} from 'shared';
-import {defaultSettings} from './default-settings';
+import {defaultSettings} from 'shared/default-settings';
 
 export async function getSettings(): Promise<Settings> {
   const response = await fetch('/settings');

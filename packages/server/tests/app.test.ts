@@ -5,8 +5,8 @@ import promises from 'node:fs/promises';
 import {type FastifyInstance} from 'fastify';
 import {DateTime} from 'luxon';
 import {type ClockState, type Settings} from 'shared';
+import {defaultSettings} from 'shared/default-settings';
 import {buildApp} from '../app.ts';
-import {defaultSettings} from '../default-settings.ts';
 
 let app: FastifyInstance;
 let settings: Settings;

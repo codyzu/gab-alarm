@@ -3,8 +3,8 @@ import {useFormContext, useWatch} from 'react-hook-form';
 import {type Settings} from 'shared';
 import {getClockState} from 'shared/clock-state';
 import {DateTime} from 'luxon';
+import {defaultSettings} from 'shared/default-settings';
 import TransitionControl from './TransitionControl';
-import {defaultSettings} from './default-settings';
 
 export default function OverrideControl() {
   const {setValue} = useFormContext();
