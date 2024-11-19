@@ -51,25 +51,6 @@ function Index() {
         (new Date(clockState.nextTransition).getTime() -
           new Date(clockState.previousTransition).getTime());
 
-  const [modeOverride, setModeOverride] = useState<
-    {mode: ClockMode; timeoutTimestamp: number} | undefined
-  >(undefined);
-
-  useEffect(() => {
-    const handle = setInterval(() => {
-      const nextTime = new Date();
-      setTime(nextTime);
-      if (modeOverride && nextTime.getTime() > modeOverride.timeoutTimestamp) {
-        setModeOverride(undefined);
-        // PlayBell();
-      }
-    }, 1000);
-
-    return () => {
-      clearInterval(handle);
-    };
-  }, [modeOverride]);
-
   // Const keyHandlers = useMemo(
   //   () =>
   //     new Map([
@@ -100,8 +81,7 @@ function Index() {
   //   };
   // }, [keyHandlers]);
 
-  const clockMode: ClockMode =
-    modeOverride?.mode ?? clockState?.currentMode ?? 'day';
+  const clockMode: ClockMode = clockState?.currentMode ?? 'day';
 
   return (
     <div
@@ -111,17 +91,7 @@ function Index() {
         clockMode === 'day' && 'bg-black',
       )}
       onClick={() => {
-        const mode = clockMode === 'day' ? 'night' : 'day';
-        setModeOverride({
-          mode,
-          timeoutTimestamp: time.getTime() + 7000,
-        });
-
-        // If (mode === 'day') {
-        //   playWake();
-        // } else {
-        //   playSleep();
-        // }
+        void fetch('/toggle', {method: 'POST'});
       }}
     >
       <div
