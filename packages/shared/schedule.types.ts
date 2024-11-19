@@ -66,5 +66,6 @@ export const clockStateSchema = z.object({
   nextMode: clockModeSchema,
   currentMode: clockModeSchema,
   isOverrideActive: z.boolean(),
+  isSoundActive: z.boolean(),
 });
 export type ClockState = z.infer<typeof clockStateSchema>;

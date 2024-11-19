@@ -84,6 +84,7 @@ export function getClockState(
           currentMode: 'day',
           previousTransition: todayDay,
           isOverrideActive: true,
+          isSoundActive: todaySchedule.day.sound,
         };
       }
 
@@ -99,6 +100,7 @@ export function getClockState(
         currentMode: 'night',
         previousTransition: todayNight,
         isOverrideActive: true,
+        isSoundActive: todaySchedule.night.sound,
       };
     }
 
@@ -116,6 +118,7 @@ export function getClockState(
         currentMode: 'night',
         previousTransition: yesterdayNight,
         isOverrideActive: true,
+        isSoundActive: yesterdaySchedule.night.sound,
       };
     }
 
@@ -126,6 +129,7 @@ export function getClockState(
       currentMode: 'day',
       previousTransition: overrideTime,
       isOverrideActive: false,
+      isSoundActive: override.transition.sound,
     };
   }
 
@@ -142,6 +146,7 @@ export function getClockState(
       currentMode: 'night',
       previousTransition: yesterdayNight,
       isOverrideActive: true,
+      isSoundActive: yesterdaySchedule.night.sound,
     };
   }
 
@@ -154,6 +159,7 @@ export function getClockState(
       previousTransition: yesterdayNight,
       currentMode: 'night',
       isOverrideActive: false,
+      isSoundActive: yesterdaySchedule.night.sound,
     };
   }
 
@@ -165,6 +171,7 @@ export function getClockState(
       previousTransition: todayDay,
       currentMode: 'day',
       isOverrideActive: false,
+      isSoundActive: todaySchedule.day.sound,
     };
   }
 
@@ -175,5 +182,6 @@ export function getClockState(
     previousTransition: todayNight,
     currentMode: 'night',
     isOverrideActive: false,
+    isSoundActive: todaySchedule.night.sound,
   };
 }

@@ -39,7 +39,9 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
         request.routeOptions.url === '/settings' &&
         reply.statusCode === 201
       ) {
-        updateClockState();
+        // Update the clock state, but don't play a sound
+        // This lets users change the schedule silently
+        updateClockState(false);
       }
     });
 
@@ -47,9 +49,10 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
     void setBrightness();
 
     // Start the first clock transition
+    // Don't bother disabling sound since the state is already set and shouldn't trigger a transition
     updateClockState();
 
-    function updateClockState() {
+    function updateClockState(isUpdateSoundActive = true) {
       const previousClockState = fastify.clockState;
       fastify.clockState = getClockState(fastify.settings, DateTime.now());
       fastify.log.info('Updating clock state');
@@ -71,12 +74,18 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
           .as('milliseconds') + 1000,
       );
 
+      // Did a transition occur?
       if (previousClockState.currentMode !== fastify.clockState.currentMode) {
         fastify.log.info(
           `Clock mode changed to ${fastify.clockState.currentMode}`,
         );
+        // Always set the brightness
         void setBrightness();
-        void playSound();
+
+        // Only play sounds if the sound is active (not the first load)
+        if (fastify.clockState.isSoundActive && isUpdateSoundActive) {
+          void playSound();
+        }
       }
 
       // Update all clients of changes to the clock state
@@ -110,6 +119,34 @@ export const clock: FastifyPluginAsyncZod = fastifyPlugin(
         return response;
       },
     );
+
+    fastify.post('/toggle', async (_request, reply) => {
+      fastify.log.info('Toggling clock state');
+      fastify.clockState = {
+        ...fastify.clockState,
+        currentMode: fastify.clockState.currentMode === 'day' ? 'night' : 'day',
+      };
+      void setBrightness();
+      void playSound();
+      fastify.log.info(
+        `Notifying ${fastify.websocketServer.clients.size} connected clients of toggle`,
+      );
+      for (const client of fastify.websocketServer.clients) {
+        client.send(JSON.stringify(fastify.clockState));
+      }
+
+      if (handle) {
+        clearTimeout(handle);
+      }
+
+      handle = setTimeout(() => {
+        handle = undefined;
+        fastify.log.info('End of toggle');
+        updateClockState();
+      }, 5000);
+
+      return reply.code(200).send('');
+    });
 
     async function playSound() {
       try {
