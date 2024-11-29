@@ -18,6 +18,7 @@ export default defineConfig({
       /* eslint-disable @typescript-eslint/naming-convention */
       '/settings': 'http://localhost:3000',
       '/toggle': 'http://localhost:3000',
+      '/reload': 'http://localhost:3000',
       '/ws': 'ws://localhost:3000',
       /* eslint-enable @typescript-eslint/naming-convention */
     },

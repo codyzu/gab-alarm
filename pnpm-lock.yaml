@@ -69,6 +69,9 @@ importers:
       '@iconify-json/pixelarticons':
         specifier: ^1.2.1
         version: 1.2.1
+      '@iconify-json/tabler':
+        specifier: ^1.2.8
+        version: 1.2.8
       '@tanstack/router-plugin':
         specifier: ^1.66.1
         version: 1.66.1(vite@5.4.9(@types/node@22.7.5)(terser@5.34.1))(webpack-sources@3.2.3)(webpack@5.95.0(esbuild@0.23.1))
@@ -806,6 +809,9 @@ packages:
 
   '@iconify-json/pixelarticons@1.2.1':
     resolution: {integrity: sha512-qGDhOKbpGYFZnjtCCZHnFn/QQIVjRw1XSCHIYD+LJtQXa4JYWhBjuveeRdt4ZYua51AIIhKb0/r3TMEaFemGfA==}
+
+  '@iconify-json/tabler@1.2.8':
+    resolution: {integrity: sha512-xvi/UKhLiFRnutSo6xuHxvOGmskYEoC2St4WDVsU9WAW1DRG1EkBUk/Zy1TpeSsBKMQfyqtdjjx9Cf4ZezOK2w==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -4214,6 +4220,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/pixelarticons@1.2.1':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/tabler@1.2.8':
     dependencies:
       '@iconify/types': 2.0.0
 

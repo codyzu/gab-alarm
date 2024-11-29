@@ -36,7 +36,7 @@ export default function OverrideControl() {
       <input
         type="button"
         className="self-end align-middle btn"
-        value="Clear"
+        value="clear"
         onClick={() => {
           setValue('override', defaultSettings.override, {
             shouldDirty: true,

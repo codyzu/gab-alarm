@@ -80,6 +80,18 @@ function Admin() {
           )}
           <div className="flex flex-row gap-4 items-end flex-grow-1 justify-between">
             <button
+              className="btn-secondary flex-row flex items-center gap-2"
+              type="button"
+              onClick={() => {
+                void fetch('/reload', {method: 'POST'});
+              }}
+            >
+              <div className="h-8 w-8 i-tabler-refresh" />
+              <div>reload clients</div>
+            </button>
+          </div>
+          <div className="flex flex-row gap-4 items-end justify-between">
+            <button
               className="btn-secondary"
               type="button"
               onClick={() => {
@@ -87,7 +99,7 @@ function Admin() {
                 methods.reset(defaultSettings, {keepDefaultValues: true});
               }}
             >
-              Defaults
+              defaults
             </button>
             <button
               className={clsx(
@@ -97,7 +109,7 @@ function Admin() {
               )}
               type="submit"
             >
-              Save
+              save
             </button>
           </div>
         </form>

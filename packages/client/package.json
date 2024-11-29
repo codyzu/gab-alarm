@@ -28,6 +28,7 @@
   "devDependencies": {
     "@iconify-json/fluent-emoji": "^1.2.1",
     "@iconify-json/pixelarticons": "^1.2.1",
+    "@iconify-json/tabler": "^1.2.8",
     "@tanstack/router-plugin": "^1.66.1",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.7.5",

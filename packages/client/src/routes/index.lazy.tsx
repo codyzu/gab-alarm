@@ -21,6 +21,14 @@ function Index() {
       shouldReconnect: () => true,
       reconnectInterval: 5000,
       reconnectAttempts: 10_000,
+      filter(message) {
+        if (message.data === 'reload') {
+          window.location.reload();
+          return false;
+        }
+
+        return true;
+      },
     },
   );
 

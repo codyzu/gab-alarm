@@ -31,8 +31,8 @@ export async function buildApp() {
 
   fastify.get('/ws', {websocket: true}, (socket, request) => {
     fastify.log.info(`Client connected: ${request.ip} ${request.hostname}`);
-    socket.on('message', (message) => {
-      fastify.log.info(`Client ${request.ip} message: ${message}`);
+    socket.on('message', (message: Uint8Array) => {
+      fastify.log.info(`Client ${request.ip} message: ${message.toString()}`);
     });
 
     fastify.log.info('Sending initial clock state to websocket');
@@ -53,6 +53,12 @@ export async function buildApp() {
   // @ts-expect-error params aren't used, but left here for reference
   fastify.get('/admin', (request, reply) => {
     return reply.sendFile('index.html');
+  });
+
+  fastify.post('/reload', async (_request, _reply) => {
+    for (const client of fastify.websocketServer.clients) {
+      client.send('reload');
+    }
   });
 
   return fastify;

@@ -60,21 +60,21 @@ export default function TransitionControl({
         </label>
         <button
           type="button"
-          className="btn flex flex-row items-center justify-center gap-4"
+          className="btn flex flex-row items-center justify-center gap-2"
           onClick={() => {
             soundField.onChange(!soundField.value);
             onChange?.();
           }}
         >
-          <div>{soundField.value ? 'sound on' : 'sound off'}</div>
           <div
             className={clsx(
               'h-8 w-8',
               soundField.value
-                ? 'i-pixelarticons-volume-3 text-active'
-                : 'i-pixelarticons-volume-x text-alert',
+                ? 'i-tabler-volume text-active'
+                : 'i-tabler-volume-3 text-alert',
             )}
           />
+          <div>{soundField.value ? 'sound on' : 'sound off'}</div>
         </button>
       </div>
     </div>
