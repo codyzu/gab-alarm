@@ -21,5 +21,6 @@ See this [presentation](https://www.youtube.com/live/_Z113lPt0iw?si=u7vqOVEfWcQf
 2. `pnpm run build && pnpm run start`
 
 ## Development
-1. `pnpm run dev`
-
+- run with watch `pnpm run dev`
+- lint `pnpm run lint`
+- test `pnpm run test`
