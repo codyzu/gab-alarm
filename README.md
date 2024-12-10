@@ -17,6 +17,9 @@ See this [presentation](https://www.youtube.com/live/_Z113lPt0iw?si=u7vqOVEfWcQf
 - Frontend: React + websockets
 
 ## Setup
+
+⚠️ Requires node.js v22.6+ due to [experimental type stripping](https://nodejs.org/docs/latest/api/typescript.html#type-stripping) support.
+
 1. `pnpm install`
 2. `pnpm run build && pnpm run start`
 
