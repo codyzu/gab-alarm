@@ -1,30 +1,22 @@
-# React + TypeScript + Vite
+# gab-alarm
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Children's Sleep Alarm Clock
 
-Currently, two official plugins are available:
+`gab-alarm` is a full-stack children's sleep alarm clock.
+It's intended to run on a raspberry-pi with a touchscreen and
+includes an admin interface.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+See this [presentation](https://www.youtube.com/live/_Z113lPt0iw?si=u7vqOVEfWcQf7JZL&t=1620) and [slides](https://docs.google.com/presentation/d/18WWd3wvjbfif7r3_V0g3amJl9sT-ilWFDtG4V8Gbb64/edit?usp=sharing) for more information.
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Backend: Node.js + Fastify
+- Frontend: React + websockets
 
-- Configure the top-level `parserOptions` property like this:
+## Setup
+1. `pnpm install`
+2. `pnpm run build && pnpm run start`
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Development
+1. `pnpm run dev`
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
