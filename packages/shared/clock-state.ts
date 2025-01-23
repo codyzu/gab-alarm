@@ -122,15 +122,20 @@ export function getClockState(
       };
     }
 
-    // Override set today, but has already ocurred
-    return {
-      nextTransition: todayNight,
-      nextMode: 'night',
-      currentMode: 'day',
-      previousTransition: overrideTime,
-      isOverrideActive: false,
-      isSoundActive: override.transition.sound,
-    };
+    // Override set today, but has already occurred and it is still day
+    // This case allows the override time to be returned as the previous transition
+    if (referenceTime < todayNight) {
+      return {
+        nextTransition: todayNight,
+        nextMode: 'night',
+        currentMode: 'day',
+        previousTransition: overrideTime,
+        isOverrideActive: false,
+        isSoundActive: override.transition.sound,
+      };
+    }
+
+    // If the override time has already occurred and it is night, fall through normal logic
   }
 
   if (

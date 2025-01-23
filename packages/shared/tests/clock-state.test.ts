@@ -321,6 +321,25 @@ const clockStateWithOverrideTests: ClockStateWithOverrideTest[] = [
     expectedMode: 'night',
     expectedOverride: true,
   },
+  {
+    name: 'override set this morning, but has already occurred and it is now night',
+
+    yesterdayDay: '2022-01-09T09:00:00',
+    yesterdayNight: '2022-01-09T20:00:00',
+    todayMorning: '2022-01-10T09:00:00',
+    todayNight: '2022-01-10T20:00:00',
+    tomorrowMorning: '2022-01-11T09:00:00',
+
+    overrideSetAt: '2022-01-10T08:59:00',
+    overrideTime: '2022-01-10T09:30:00',
+
+    currentTime: '2022-01-10T20:30:00',
+
+    expectedPreviousTransition: '2022-01-10T20:00:00',
+    expectedNextTransition: '2022-01-11T09:00:00',
+    expectedMode: 'night',
+    expectedOverride: false,
+  },
 ];
 
 for (const testData of clockStateWithOverrideTests) {
