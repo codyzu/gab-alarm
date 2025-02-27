@@ -41,13 +41,13 @@ export async function buildApp() {
 
   // @ts-expect-error params aren't used, but left here for reference
   fastify.get('/', (request, reply) => {
-    return reply.sendFile('index.html', {cacheControl: false});
+    return reply.sendFile('index.html', {maxAge: 0, immutable: false});
   });
 
   // @ts-expect-error params aren't used, but left here for reference
   fastify.get('/clock.svg', (request, reply) => {
-    // Favicon does not use cache-bursting, let's disable the default cache header
-    return reply.sendFile('clock.svg', {cacheControl: false});
+    // Favicon does not use cache-bursting, disable caching
+    return reply.sendFile('clock.svg', {maxAge: 0, immutable: false});
   });
 
   // @ts-expect-error params aren't used, but left here for reference
